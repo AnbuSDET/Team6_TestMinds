@@ -36,7 +36,7 @@ public class ApplicationHooks {
         }
     }
 
-    @After
+    //@After
     public void quitBrowser() {
         System.out.println("=========quitBrowser=======================");
         if (driver != null) {

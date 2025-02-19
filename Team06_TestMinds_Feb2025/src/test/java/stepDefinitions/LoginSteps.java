@@ -18,8 +18,6 @@ public class LoginSteps extends Constants{
 	Context context;
 	LoginPage loginPage;
 	
-	
-	
 
 	public LoginSteps(Context context) {
 		this.context = context;
@@ -39,4 +37,9 @@ public class LoginSteps extends Constants{
 	public void admin_should_land_on_home_page() {
 		loginPage.validateHomePage();
 	}
+	
+	
+	
+	
+	
 }
