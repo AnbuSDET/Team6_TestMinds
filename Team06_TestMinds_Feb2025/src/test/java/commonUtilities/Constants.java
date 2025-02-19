@@ -18,5 +18,6 @@ public class Constants {
 	public static String baseURL = configProp.getString("BaseUrl");
 
 	public static String InvalidbaseUrl = configProp.getString("InvalidBaseURL");
+
 	
 }
