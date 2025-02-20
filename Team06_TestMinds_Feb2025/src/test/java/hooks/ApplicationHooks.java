@@ -12,37 +12,33 @@ import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
-
 public class ApplicationHooks {
 
-    private DriverFactory driverFactory;
-    private WebDriver driver;
-    public static Logger log = LogManager.getLogger();
+	private DriverFactory driverFactory;
+	private WebDriver driver;
+	public static Logger log = LogManager.getLogger();
 
-    @Before
-    public void launchBrowser() {
-        System.out.println("=========launchBrowser=======================");
-        driverFactory = DriverFactory.getInstance();
-        driver = driverFactory.getDriver();
-    }
+	@Before
+	public void launchBrowser() {
+		System.out.println("=========launchBrowser=======================");
+		driverFactory = DriverFactory.getInstance();
+		driverFactory.setupDriver();
+	}
 
-    @AfterStep
-    public void screenShot(Scenario scenario) {
-        if (scenario.isFailed()) {
-            String screenshotName = scenario.getName().replaceAll(" ", "_");
-            byte[] sourcePath = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(sourcePath, "image/png", screenshotName);
-            System.out.println("=========screenShot=======================" + screenshotName);
-        }
-    }
+	@AfterStep
+	public void screenShot(Scenario scenario) {
+		if (scenario.isFailed()) {
+			String screenshotName = scenario.getName().replaceAll(" ", "_");
+			byte[] sourcePath = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+			scenario.attach(sourcePath, "image/png", screenshotName);
+			System.out.println("=========screenShot=======================" + screenshotName);
+		}
+	}
 
-    //@After
-    public void quitBrowser() {
-        System.out.println("=========quitBrowser=======================");
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+	@After
+	public void quitBrowser() {
+		System.out.println("=========quitBrowser=======================");
+		if(driverFactory!=null)
+		driverFactory.quitDriver();
+	}
 }
-
-

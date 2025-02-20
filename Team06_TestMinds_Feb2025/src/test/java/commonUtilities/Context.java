@@ -11,10 +11,12 @@ public class Context {
     private ManageBatchPage managebatchPage;
 
     public Context() {
-        driverFactory = DriverFactory.getInstance();
-        loginPage = new LoginPage(driverFactory.getDriver());
-        managebatchPage = new ManageBatchPage(driverFactory.getDriver());
-    }
+		driverFactory = DriverFactory.getInstance();
+		loginPage = new LoginPage(driverFactory.setupDriver());
+		managebatchPage = new ManageBatchPage(driverFactory.setupDriver());
+
+	}
+
 
     public DriverFactory getDriverFactory() {
         return driverFactory;

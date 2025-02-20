@@ -53,6 +53,13 @@ public class Utility_Methods {
 		return tagName;
 	}
 
+	public String getCurrentURL()
+	{
+		String CurtUrl= driver.getCurrentUrl();
+		
+		return CurtUrl;
+		
+	}
 	public boolean isElementDisplayed(WebElement element) {
 		boolean flag = false;
 		try {

@@ -23,8 +23,13 @@ public class DriverFactory extends Constants {
         }
         return instance;
     }
+    
+    public void quitDriver() {
+    	 driver.get().quit();
+    	 driver.remove();
+    }
 
-    public WebDriver getDriver() {
+	public WebDriver setupDriver() {
         if (driver.get() == null) {
             String browser = configProp.getString("browser");
             System.out.println("browser value is:" + browser);
