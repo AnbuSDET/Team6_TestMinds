@@ -1,18 +1,13 @@
 package commonUtilities;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
@@ -21,8 +16,11 @@ public class Utility_Methods {
 	public WebDriver driver;
 	
 	public Utility_Methods(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
 		this.driver = driver;		
 	}
+	
 	// Utility for methods	
 	
 	WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -40,13 +38,7 @@ public class Utility_Methods {
 		}
 
 	}
-
-	public String getattribute(WebElement element, String name) {
-
-		String attributeValue = element.getAttribute(name);
-		System.out.println("Element's" + name + "atrribute value is: " + attributeValue);
-		return attributeValue;
-	}
+	
 
 	public String getElementText(WebElement ele) {
 		return ele.getText();
@@ -127,6 +119,19 @@ public class Utility_Methods {
 		}
 		return false;
 	}
+	
+	public boolean elementVisible_allRows(List<WebElement> elementsList )
+	{
+		boolean allRowicons = true;
+        for (WebElement editIcon : elementsList) {
+            if (!editIcon.isEnabled()) {
+                System.out.println("Edit icon is not enabled: " + editIcon.getText());
+                allRowicons = false;
+            }
+        }
+        return allRowicons;		
+	}
+	
 
 	public boolean webElement_Click(WebElement element) {
 		try {
@@ -168,12 +173,11 @@ public class Utility_Methods {
 		return title;
 	}
    
-    
-    public String getElementAttribute(WebElement element,String attribute) {
-		WebElement textElement = new WebDriverWait(driver, Duration.ofSeconds(20))
-				.until(ExpectedConditions.visibilityOf(element));
-		return textElement.getAttribute(attribute);
+    public  String getPageCurrrentURL() {
+		String CurrentURL = driver.getCurrentUrl();
+		return CurrentURL;
 	}
+    
 
 	public void assertText(WebElement element, String expected,String msg) {
 		Assert.assertTrue(getElementText(element).equals(expected),msg);
