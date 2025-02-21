@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openqa.selenium.By;
-
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -178,11 +178,18 @@ public class Utility_Methods {
 	public void assertText(WebElement element, String expected,String msg) {
 		Assert.assertTrue(getElementText(element).equals(expected),msg);
 	}
-	
-	 
-   
     
+	public void clickUsingJS(WebElement element) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+	}
+ 
 
-  
+	public WebElement waitUntilClickable(WebElement element, int timeoutInSeconds) {
+		return new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
+				.until(ExpectedConditions.elementToBeClickable(element));
+	}
+
+
+
    
 }
