@@ -61,7 +61,7 @@ public class ManageBatchsteps {
 	
 	@Then("Admin should see the enabled pagination controls under the data table")
 	public void admin_should_see_the_enabled_pagination_controls_under_the_data_table() {
-		Assert.assertEquals(managebatchPage.disabledpaginationBtn(),false);
+		Assert.assertEquals(managebatchPage.enabledpaginationBtn(),true);
 	    
 	}
        // Validate edit icon, check box , delete icon in each data rows

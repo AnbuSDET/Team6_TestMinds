@@ -27,14 +27,17 @@ public class ManageBatchPage {
 	@FindBy(xpath="//button[@class='p-button-danger p-button p-component p-button-icon-only']") 
 	WebElement disabledDeleteIcon;
 	
-	@FindBy(xpath="//button[@class='p-paginator-prev p-paginator-element p-link p-disabled p-ripple']")
-	WebElement disabledPaginationbtn;
+	@FindBy(xpath="//span[@class='p-paginator-pages ng-star-inserted']")
+	WebElement enabledPaginatnBtn;
 	
 	@FindBy(xpath = "//table/tbody/tr//button[contains(@icon, 'pi-pencil')]") 
 	List<WebElement> allEditicons;
 	
    	@FindBy(xpath = "//table/tbody/tr//button[contains(@icon, 'pi-trash')]") 
    	List<WebElement> allDeleteIcons;
+   	
+   	@FindBy(xpath = "//div[@class='p-checkbox-box p-component']") 
+   	List<WebElement> allCheckboxIcons;
 
 	public ManageBatchPage(WebDriver driver) {
 		this.driver = driver;
@@ -74,9 +77,9 @@ public class ManageBatchPage {
 		 return delBtnVisiblity;
 	 }
 	 
-	 public boolean disabledpaginationBtn()
+	 public boolean enabledpaginationBtn()
 	 {
-		 boolean disablePagination=util.isElementEnabled(disabledDeleteIcon);
+		 boolean disablePagination=util.isElementEnabled(enabledPaginatnBtn);
 		 
 		 return disablePagination;
 	 } 
@@ -99,7 +102,9 @@ public class ManageBatchPage {
 		            break; 
 
 		        case "Check_Box":
-		            
+		        	if (util.elementVisible_allRows(allCheckboxIcons) == flag) {
+		                return true; 
+		            }
 		            break;
 
 		        default:

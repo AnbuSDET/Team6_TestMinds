@@ -39,6 +39,8 @@ public class Utility_Methods {
 
 	}
 	
+	
+	
 
 	public String getElementText(WebElement ele) {
 		return ele.getText();
@@ -120,16 +122,21 @@ public class Utility_Methods {
 		return false;
 	}
 	
+	
+	
 	public boolean elementVisible_allRows(List<WebElement> elementsList )
-	{
-		boolean allRowicons = true;
-        for (WebElement editIcon : elementsList) {
+	{				
+		for (WebElement element : elementsList) {
+	        webDriverWait.until(ExpectedConditions.visibilityOf(element));
+	    }
+        for (WebElement editIcon : elementsList) {        	
+        	
             if (!editIcon.isEnabled()) {
-                System.out.println("Edit icon is not enabled: " + editIcon.getText());
-                allRowicons = false;
+                System.out.println("Icons are enabled: " + editIcon.getText());
+                return false;
             }
         }
-        return allRowicons;		
+        return true;		
 	}
 	
 
