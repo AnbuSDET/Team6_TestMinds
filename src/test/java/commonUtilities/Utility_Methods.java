@@ -2,8 +2,10 @@ package commonUtilities;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openqa.selenium.By;
@@ -190,6 +192,29 @@ public class Utility_Methods {
 	}
 
 
+//sorting 
+	
+	
+	public void clickSortIcon(WebElement sortIcon) {
+	    clickUsingJS(waitUntilClickable(sortIcon, 50));
+	}
 
+	public List<String> getOriginalList(List<WebElement> elementsList) {
+	    return elementsList.stream()
+	            .map(e -> e.getText().toLowerCase().trim())
+	            .collect(Collectors.toList());
+	}
+
+	public List<String> getSortedList(List<WebElement> elementsList, boolean ascending) {
+	    List<String> originalList = getOriginalList(elementsList);
+	    return ascending
+	            ? originalList.stream().sorted().collect(Collectors.toList())
+	            : originalList.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+	}
+
+	
+	
+	
+	
    
 }

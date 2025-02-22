@@ -1,4 +1,4 @@
-@class
+@editclass
 Feature: Edit Class
 
   Background: 
@@ -19,15 +19,20 @@ Feature: Edit Class
     When Admin clicks on the edit icon
     Then Admin should see class topic field is disabled
 
-Scenario Outline: Verify edit class functionalities 
-Given Admin is on the Edit Class Popup window
-When Admin updates the class and click on save button from "<sheetName>" with scenario name "<scenarioName>"
-Then the Admin gets message from "<sheetName>" with scenario name "<scenarioName>"
+  Scenario Outline: Verify edit class functionalities
+    Given Admin is on the Edit Class Popup window
+    When Admin updates the class and click on save button from "<sheetName>" with scenario name "<scenarioName>"
+    Then the Admin gets message from "<sheetName>" with scenario name "<scenarioName>"
 
-Examples:
-|sheetName|scenarioName|
-|Class|Edit class with valid data| 
-|Class|Edit class with invalid data|
-|Class|Edit class with mandatory fields|
-|Class|Edit class with optional fields|
-|Class|Edit class with invalid values in text fields|
+    Examples: 
+      | sheetName | scenarioName                                  |
+      | Class     | Edit class with valid data                    |
+      | Class     | Edit class with invalid data                  |
+      | Class     | Edit class with mandatory fields              |
+      | Class     | Edit class with optional fields               |
+      | Class     | Edit class with invalid values in text fields |
+
+  Scenario: Validate Cancel button on Edit popup
+    Given Admin is on the Edit Class Popup window
+    When Admin clicks Cancel button on edit popup
+    Then Admin can see the class details popup disappears and can see nothing changed for particular Class
