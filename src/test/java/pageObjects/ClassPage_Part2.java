@@ -127,6 +127,21 @@ public class ClassPage_Part2 extends Constants {
 	@FindBy(xpath = "//tr/td[7]")
 	private List<WebElement> classStaffNameList;
 
+	@FindBy(xpath = "(//button[@icon='pi pi-trash'])[2]")
+	private WebElement deleteSingleClass;
+
+	@FindBy(xpath = "//span[text()='Confirm']")
+	private WebElement deleteConfirmHeader;
+
+	@FindBy(xpath = "//span[text()='Yes']")
+	private WebElement deleteYesbtn;
+
+	@FindBy(xpath = "//span[text()='No']")
+	private WebElement deleteNobtn;
+
+	@FindBy(xpath = "(//span[contains(@class, 'pi pi-times')])[1]")
+	private WebElement deleteClassClosebtn;
+
 	public ClassPage_Part2(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -246,27 +261,20 @@ public class ClassPage_Part2 extends Constants {
 		try {
 			if (scenarioName.equals("Edit class with invalid data")
 					|| scenarioName.equals("Edit class with invalid values in text fields")) {
-				validateErrorMessage(classDateErrormsg, "required");
+				validateEditClassErrorMessage(classDateErrormsg, "required");
 			} else {
 				List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
-				validateAlertMessage(alertmsg, data.get(5));
+				util.validateAlertMessage(alertmsg, data.get(5));
 			}
 		} catch (Exception e) {
 			Assert.fail("Error in getting alerts: " + e.getMessage());
 		}
 	}
 
-	private void validateErrorMessage(WebElement element, String expectedText) {
-		wait.until(ExpectedConditions.visibilityOf(element));
+	private void validateEditClassErrorMessage(WebElement element, String expectedText) {
+		util.waitForElement(element);
 		Assert.assertTrue(element.isDisplayed() && element.getText().contains(expectedText),
 				"Expected error message containing: " + expectedText);
-	}
-
-	private void validateAlertMessage(WebElement element, String expectedText) {
-		wait.until(ExpectedConditions.visibilityOf(element));
-		String actualMsg = element.getText().replaceAll("\\s+", " ").trim();
-		String expectedMsg = expectedText.replaceAll("\\s+", " ").trim();
-		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);
 	}
 
 	// sorting
@@ -422,6 +430,45 @@ public class ClassPage_Part2 extends Constants {
 		List<String> sortedClassStaffNameDesc = util.getSortedList(classStaffNameList, false);
 		return sortedClassStaffNameDesc;
 
+	}
+
+	// delete class
+
+	public void clickSingleClassDeleteIcon() {
+		util.clickUsingJS(util.waitUntilClickable(deleteSingleClass, 20));
+	}
+
+	public void validateDeleteAlertBox(String expectedHeading) {
+		util.waitForElement(deleteConfirmHeader);
+		String actualHeading = deleteConfirmHeader.getText();
+		Assert.assertEquals(actualHeading, expectedHeading, "Confirm heading mismatch!");
+		Assert.assertTrue(deleteYesbtn.isDisplayed(), "YES button is not displayed");
+		Assert.assertTrue(deleteNobtn.isDisplayed(), "NO button is not displayed");
+	}
+
+	public void clickYesButton() {
+		util.clickUsingJS(util.waitUntilClickable(deleteYesbtn, 20));
+	}
+
+	public void clickNoButton() {
+		util.clickUsingJS(util.waitUntilClickable(deleteNobtn, 20));
+	}
+
+	public void validateSuccessfulDelmessage(String msg) {
+		util.validateAlertMessage(alertmsg, msg);
+
+	}
+
+	public boolean validateDelPopupDisappears() {
+		try {
+			return !deleteConfirmHeader.isDisplayed();
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+
+	public void clickCloseButton() {
+		util.clickUsingJS(util.waitUntilClickable(deleteClassClosebtn, 20));
 	}
 
 }
