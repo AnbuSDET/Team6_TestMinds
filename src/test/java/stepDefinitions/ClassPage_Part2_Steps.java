@@ -314,4 +314,88 @@ public class ClassPage_Part2_Steps extends Constants {
 		Assert.assertTrue(classpage2.commonDeleteAlertConfirmNo(), "Selected Single Class not successfully Deleted");
 	}
 
+	// navigate links
+
+	@When("Admin clicks on any page link on Manage Class page")
+	public void admin_clicks_on_any_page_link_on_manage_class_page() {
+		classpage2.homeButton();
+	}
+
+	@Then("Admin is redirected to which page link they clicked.")
+	public void admin_is_redirected_to_which_page_link_they_clicked() {
+		classpage2.validateDashboardTitle();
+	}
+
+	@When("Admin clicks on Logout link on Manage class page")
+	public void admin_clicks_on_logout_link_on_manage_class_page() {
+		classpage2.logoutButton();
+	}
+
+	@Then("Admin is redirected to Login page")
+	public void admin_is_redirected_to_login_page() {
+
+	}
+
+	@When("Admin clicks on Class link on Manage Class page")
+	public void admin_clicks_on_class_link_on_manage_class_page() {
+		classpage2.classButton();
+	}
+
+	@Then("Admin is redirected to class page")
+	public void admin_is_redirected_to_class_page() {
+		classpage2.validateClassTitle();
+	}
+
+	// search feature
+
+	@Then("Admin searches by valid batch name,class topic and staff name with {string} and {string} in the class module")
+	public void admin_searches_by_valid_batch_name_class_topic_and_staff_name_with_and_in_the_class_module(
+			String sheetName, String scenarioName) throws IOException {
+		classpage2.searchClass(sheetName, scenarioName);
+	}
+
+	// pagination
+
+	@When("Admin clicks Last page link on the Class table")
+	public void admin_clicks_last_page_link_on_the_class_table() {
+		classpage2.clickLastLink();
+	}
+
+	@Then("Admin should see the last page record on the table with Next page link are disabled")
+	public void admin_should_see_the_last_page_record_on_the_table_with_next_page_link_are_disabled() {
+		Assert.assertTrue(classpage2.getOriginalBatchNameList().size()>0,"Last page record is present");
+	}
+
+	@When("Admin clicks Next page link on the Class table")
+	public void admin_clicks_next_page_link_on_the_class_table() {
+		classpage2.clickNextLink();
+	}
+
+	@Then("Admin should see the next page record on the table  with Pagination has first active link enabled")
+	public void admin_should_see_the_next_page_record_on_the_table_with_pagination_has_next_active_link_enabled() {
+		Assert.assertTrue(classpage2.isActiveFirstLink(),"First Page Link is Active");
+	}
+
+	@When("Admin clicks Start page link on the Class table")
+	public void admin_clicks_start_page_link_on_the_class_table() {
+		classpage2.clickLastLink();
+	    classpage2.clickStartLink();
+	}
+
+	@Then("Admin should see the start page record on the table with pagination has start page link enabled")
+	public void admin_should_see_the_start_page_record_on_the_table_with_pagination_has_start_page_link_enabled() {
+		Assert.assertTrue(classpage2.isActiveLastLink(),"Start Page Link is Active");
+	}
+
+	@When("Admin clicks First page link on the Class table")
+	public void admin_clicks_first_page_link_on_the_class_table() {
+		classpage2.clickLastLink();
+		 classpage2.clickFirstLink();
+	}
+
+	@Then("Admin should see the very first page record on the table with Previous page link are disabled")
+	public void admin_should_see_the_very_first_page_record_on_the_table_with_previous_page_link_are_disabled() {
+		Assert.assertTrue(classpage2.isFirstPage(),"First Page Record is present");
+	}
+
 }

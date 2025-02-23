@@ -5,11 +5,15 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
@@ -20,12 +24,24 @@ public class ClassPage_Part2 extends Constants {
 	WebDriver driver;
 	WebDriverWait wait;
 	Utility_Methods util;
-	
+
 	@FindBy(xpath = "(//span[@class='mat-button-wrapper'])[4]")
 	WebElement classBtn;
 
+	@FindBy(xpath = "(//span[@class='mat-button-wrapper'])[1]")
+	WebElement homeBtn;
+
+	@FindBy(xpath = "(//span[@class='mat-button-wrapper'])[5]")
+	WebElement logoutBtn;
+
+	@FindBy(id = "login")
+	WebElement loginBtn;
+
 	@FindBy(xpath = "//div[text()=' Manage Class']")
 	WebElement classTitle;
+
+	@FindBy(xpath = "//div[text()=' Dashboard']")
+	WebElement dashboardTitle;
 
 	@FindBy(xpath = "(//span[@class='p-button-icon pi pi-pencil'])[1]")
 	WebElement classEditBtnFirst;
@@ -111,8 +127,14 @@ public class ClassPage_Part2 extends Constants {
 	@FindBy(xpath = "//tr/td[2]")
 	private List<WebElement> batchNameList;
 
+	@FindBy(xpath = "(//tr/td[2])[1]")
+	private WebElement batchNameFirstRow;
+
 	@FindBy(xpath = "//tr/td[3]")
 	private List<WebElement> classTopicList;
+
+	@FindBy(xpath = "(//tr/td[2])[3]")
+	private WebElement classTopicFirstRow;
 
 	@FindBy(xpath = "//tr/td[4]")
 	private List<WebElement> classDescList;
@@ -125,6 +147,9 @@ public class ClassPage_Part2 extends Constants {
 
 	@FindBy(xpath = "//tr/td[7]")
 	private List<WebElement> classStaffNameList;
+
+	@FindBy(xpath = "(//tr/td[2])[7]")
+	private WebElement classStaffNameFirstRow;
 
 	@FindBy(xpath = "(//button[@icon='pi pi-trash'])[2]")
 	private WebElement deleteSingleClass;
@@ -156,6 +181,24 @@ public class ClassPage_Part2 extends Constants {
 	@FindBy(xpath = "//tr[2]/td[1]/p-tablecheckbox/div/div[2]")
 	private WebElement secondClassRowcheckBox;
 
+	@FindBy(id = "filterGlobal")
+	private WebElement searchTextBox;
+
+	@FindBy(xpath = "//button[@class='p-paginator-next p-paginator-element p-link p-ripple']")
+	private WebElement nextBtn;
+
+	@FindBy(xpath = "//button[@class='p-paginator-last p-paginator-element p-link p-ripple ng-star-inserted']")
+	private WebElement lastBtn;
+
+	@FindBy(xpath = "//button[@class='p-paginator-prev p-paginator-element p-link p-ripple']")
+	private WebElement firstBtn;
+
+	@FindBy(xpath = "//button[@class='p-paginator-first p-paginator-element p-link p-ripple ng-star-inserted']")
+	private WebElement startBtn;
+
+	@FindBy(xpath = "//span[@class='p-paginator-current ng-star-inserted']")
+	private WebElement firstPageOne;
+
 	public ClassPage_Part2(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -163,9 +206,29 @@ public class ClassPage_Part2 extends Constants {
 	}
 
 	public boolean validateClassTitle() {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		util.waitForElement(classBtn);
 		classBtn.click();
 		return classTitle.isDisplayed();
+	}
+
+	public boolean validateDashboardTitle() {
+		return dashboardTitle.isDisplayed();
+	}
+
+	public boolean validateLoginPage() {
+		return loginBtn.isDisplayed();
+	}
+
+	public void classButton() {
+		util.clickUsingJS(util.waitUntilClickable(classBtn, 20));
+	}
+
+	public void homeButton() {
+		util.clickUsingJS(util.waitUntilClickable(homeBtn, 20));
+	}
+
+	public void logoutButton() {
+		util.clickUsingJS(util.waitUntilClickable(logoutBtn, 20));
 	}
 
 	public void clickClassEditBtn() {
@@ -217,7 +280,11 @@ public class ClassPage_Part2 extends Constants {
 	}
 
 	public void editClass(String sheetname, String scenarioName) throws IOException {
+
 		List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
+		if (data.isEmpty()) {
+			Assert.fail("No data found for scenario: " + scenarioName);
+		}
 
 		try {
 			if (scenarioName.equalsIgnoreCase("Edit class with invalid data")) {
@@ -278,6 +345,9 @@ public class ClassPage_Part2 extends Constants {
 				validateEditClassErrorMessage(classDateErrormsg, "required");
 			} else {
 				List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
+				if (data.isEmpty()) {
+					Assert.fail("No data found for scenario: " + scenarioName);
+				}
 				util.validateAlertMessage(alertmsg, data.get(5));
 			}
 		} catch (Exception e) {
@@ -548,4 +618,141 @@ public class ClassPage_Part2 extends Constants {
 		return confirmDelete(false, true);
 	}
 
+	// search
+	public void searchClass(String sheetName, String scenarioName) throws IOException {
+		List<String> rowData = xlutils.getRowData(sheetName, 0, scenarioName);
+
+		if (rowData.isEmpty()) {
+			Assert.fail("No data found for scenario: " + scenarioName);
+		}
+
+		String batchName = rowData.get(6);
+		String classTopic = rowData.get(7);
+		String staffName = rowData.get(8);
+
+		String searchKeyword = searchedWord(scenarioName, batchName, classTopic, staffName);
+
+		if (searchKeyword != null) {
+			searchOperation(searchKeyword, batchName, classTopic, staffName);
+		} else {
+			Assert.fail("Invalid scenario name: " + scenarioName);
+		}
+	}
+
+	private String searchedWord(String scenarioName, String batchName, String classTopic, String staffName) {
+		if (scenarioName.equalsIgnoreCase("Search with valid batch name")) {
+			return batchName;
+		} else if (scenarioName.equalsIgnoreCase("Search with valid class topic")) {
+			return classTopic;
+		} else if (scenarioName.equalsIgnoreCase("Search with valid staff name")) {
+			return staffName;
+		}
+		return null;
+	}
+
+	private void searchOperation(String searchKeyword, String batchName, String classTopic, String staffName) {
+		try {
+			util.waitForElement(searchTextBox);
+			searchTextBox.sendKeys(searchKeyword);
+			searchTextBox.sendKeys(Keys.ENTER);
+			util.waitForElement(firstrowField);
+
+			boolean isBatchFound = false;
+			do {
+				for (int i = 0; i < batchNameList.size(); i++) {
+					if (matchesSearchCriteria(i, batchName, classTopic, staffName)) {
+						isBatchFound = true;
+						break;
+					}
+				}
+
+				if (isBatchFound)
+					break;
+
+			} while (navigateToNextPageIfExists());
+
+			Assert.assertTrue(isBatchFound, "No matching batch found in search results.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail("Exception during search execution: " + e.getMessage());
+		}
+
+	}
+
+	private boolean matchesSearchCriteria(int index, String batchName, String classTopic, String staffName) {
+		return batchName.equalsIgnoreCase(batchNameList.get(index).getText().trim())
+				&& classTopic.equalsIgnoreCase(classTopicList.get(index).getText().trim())
+				&& staffName.equalsIgnoreCase(classStaffNameList.get(index).getText().trim());
+	}
+
+	private boolean navigateToNextPageIfExists() {
+		try {
+			if (!nextBtn.isEnabled()) {
+				return false;
+			}
+			util.clickUsingJS(util.waitUntilClickable(nextBtn, 20));
+			util.waitForElement(firstrowField); // Wait for new data to load
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+
+	}
+
+	// pagination
+
+	public void clickNextLink() {
+		util.clickUsingJS(util.waitUntilClickable(nextBtn, 20));
+	}
+	
+	public void clickLastLink() {
+		util.clickUsingJS(util.waitUntilClickable(lastBtn, 20));
+	}
+	
+
+	public void clickStartLink() {
+		util.clickUsingJS(util.waitUntilClickable(startBtn, 20));
+	}
+	
+	public void clickFirstLink() {
+		util.clickUsingJS(util.waitUntilClickable(firstBtn, 20));
+	}
+	
+
+	public boolean isActiveFirstLink() {
+	    try {
+	        if (firstBtn.isEnabled()) {
+	            return true; 
+	        }
+	    } catch (NoSuchElementException e) {
+	        System.err.println("first button not found.");
+	    }
+	    return false;
+	}
+
+	public boolean isActiveLastLink() {
+	    try {
+	        if (lastBtn.isEnabled()) {
+	            return true; 
+	        }
+	    } catch (NoSuchElementException e) {
+	        System.err.println("Start Page button not found.");
+	    }
+	    return false;
+	}
+	
+	public boolean isFirstPage() {
+		try {
+			 boolean isOneButtonHighlighted  =firstPageOne.getText().contains("1");
+
+		        if(isOneButtonHighlighted && getOriginalBatchNameList().size()>0)
+		        {
+		        	return true;
+		        }
+		}catch (NoSuchElementException e) {
+	        System.err.println("First Page button not found.");
+	    }
+	    return false;
+	}
+	
 }

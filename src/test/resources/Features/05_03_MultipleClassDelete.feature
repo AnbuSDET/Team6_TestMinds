@@ -1,4 +1,4 @@
-@deleteclass
+@multipledeleteclass
 Feature: Multiple Delete Class
 
   Background: 
