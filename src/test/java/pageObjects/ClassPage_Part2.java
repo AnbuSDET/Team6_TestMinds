@@ -2,7 +2,7 @@ package pageObjects;
 
 import java.io.IOException;
 import java.time.Duration;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.NoSuchElementException;
@@ -10,7 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
@@ -21,7 +20,7 @@ public class ClassPage_Part2 extends Constants {
 	WebDriver driver;
 	WebDriverWait wait;
 	Utility_Methods util;
-
+	
 	@FindBy(xpath = "(//span[@class='mat-button-wrapper'])[4]")
 	WebElement classBtn;
 
@@ -141,6 +140,21 @@ public class ClassPage_Part2 extends Constants {
 
 	@FindBy(xpath = "(//span[contains(@class, 'pi pi-times')])[1]")
 	private WebElement deleteClassClosebtn;
+
+	@FindBy(xpath = "//button[@class='p-button-danger p-button p-component p-button-icon-only']")
+	private WebElement commonDeleteButton;
+
+	@FindBy(xpath = "//table[1]/tbody[1]/tr[1]/td[1]//div[1]/div[2]")
+	private WebElement firstClassRowcheckBox;
+
+	@FindBy(xpath = "//tr[1]/td[3]")
+	private WebElement firstrowField;
+
+	@FindBy(xpath = "//tr[2]/td[3]")
+	private WebElement secondrowField;
+
+	@FindBy(xpath = "//tr[2]/td[1]/p-tablecheckbox/div/div[2]")
+	private WebElement secondClassRowcheckBox;
 
 	public ClassPage_Part2(WebDriver driver) {
 		this.driver = driver;
@@ -469,6 +483,69 @@ public class ClassPage_Part2 extends Constants {
 
 	public void clickCloseButton() {
 		util.clickUsingJS(util.waitUntilClickable(deleteClassClosebtn, 20));
+	}
+
+	// multiple delete
+
+	public void selectClassFirstRowCheckBox() {
+		util.clickUsingJS(util.waitUntilClickable(firstClassRowcheckBox, 20));
+	}
+
+	public void clickCommonDeleteBtnClass() {
+		util.clickUsingJS(util.waitUntilClickable(commonDeleteButton, 20));
+	}
+
+	public void selectMultipleRowCheckBoxes() {
+		util.clickUsingJS(util.waitUntilClickable(firstClassRowcheckBox, 20));
+		util.clickUsingJS(util.waitUntilClickable(secondClassRowcheckBox, 20));
+	}
+
+	public boolean isEnabledCommonDeleteBtn() {
+		boolean isEnabled = commonDeleteButton.isEnabled();
+		if (isEnabled) {
+			System.out.println("The button is enabled.");
+		} else {
+			System.out.println("The button is disabled.");
+		}
+		return isEnabled;
+	}
+
+	public boolean confirmDelete(boolean confirm, boolean multiple) throws InterruptedException {
+		List<String> targetedDeleteClassTopics = new ArrayList<>();
+		targetedDeleteClassTopics.add(firstrowField.getText().toLowerCase().trim());
+		if (multiple) {
+			targetedDeleteClassTopics.add(secondrowField.getText().toLowerCase().trim());
+		}
+
+		System.out.println("Targeted delete class topics: " + targetedDeleteClassTopics);
+		if (confirm) {
+			clickYesButton();
+		} else {
+			clickNoButton();
+		}
+		List<String> originalClassTopicList = getOriginalClassTopicList();
+		System.out.println("Original class topic list: " + originalClassTopicList);
+
+		boolean result = confirm ? !originalClassTopicList.containsAll(targetedDeleteClassTopics)
+				: originalClassTopicList.containsAll(targetedDeleteClassTopics);
+		return result;
+	}
+
+	public boolean commonDeleteAlertConfirmYes() throws InterruptedException {
+		return confirmDelete(true, false);
+
+	}
+
+	public boolean commonDeleteAlertConfirmNo() throws InterruptedException {
+		return confirmDelete(false, false);
+	}
+
+	public boolean commonDeleteMultipleAlertConfirmYes() throws InterruptedException {
+		return confirmDelete(true, true);
+	}
+
+	public boolean commonDeleteMultipleAlertConfirmNo() throws InterruptedException {
+		return confirmDelete(false, true);
 	}
 
 }

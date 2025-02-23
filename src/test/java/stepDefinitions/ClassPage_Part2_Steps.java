@@ -222,44 +222,96 @@ public class ClassPage_Part2_Steps extends Constants {
 		Assert.assertTrue(classpage2.getOriginalClassStaffNameList().equals(classpage2.getSortedClassStatusListDesc()),
 				"The data is sorted on the table based on the class staff name column values in descending order");
 	}
-	
-	
-	//Delete Class
-	
+
+	// Delete Class
+
 	@When("Admin clicks the delete icon")
 	public void admin_clicks_the_delete_icon() {
-	  classpage2.clickSingleClassDeleteIcon();
+		classpage2.clickSingleClassDeleteIcon();
 	}
+
 	@Then("Admin should see a alert open with heading {string} along with  <YES> and <NO> button for deletion")
 	public void admin_should_see_a_alert_open_with_heading_along_with_yes_and_no_button_for_deletion(String heading) {
-	   classpage2.validateDeleteAlertBox(heading);
+		classpage2.validateDeleteAlertBox(heading);
 	}
-	
+
 	@When("Admin clicks yes option")
 	public void admin_clicks_yes_option() {
-	   classpage2.clickYesButton();
+		classpage2.clickYesButton();
 	}
+
 	@Then("Admin gets a message {string} alert and do not see that Class in the data table")
 	public void admin_gets_a_message_alert_and_do_not_see_that_class_in_the_data_table(String msg) {
-	   classpage2.validateSuccessfulDelmessage(msg);
+		classpage2.validateSuccessfulDelmessage(msg);
 	}
-	
+
 	@When("Admin clicks No option")
 	public void admin_clicks_no_option() {
-	   classpage2.clickNoButton();
+		classpage2.clickNoButton();
 	}
+
 	@Then("Admin can see the deletion alert disappears without deleting")
 	public void admin_can_see_the_deletion_alert_disappears_without_deleting() {
-	   classpage2.validateDelPopupDisappears();
+		classpage2.validateDelPopupDisappears();
 	}
-	
+
 	@When("Admin clicks on close button")
 	public void admin_clicks_on_close_button() {
-	    classpage2.clickCloseButton();
+		classpage2.clickCloseButton();
 	}
+
 	@Then("Admin can see the deletion alert disappears without any changes")
 	public void admin_can_see_the_deletion_alert_disappears_without_any_changes() {
-	  
+
 	}
-	
+
+	// Multiple Delete Class
+
+	@When("Admin clicks any checkbox in the data table")
+	public void admin_clicks_any_checkbox_in_the_data_table() {
+		classpage2.selectClassFirstRowCheckBox();
+	}
+
+	@Then("Admin should see common delete option enabled under header Manage class")
+	public void admin_should_see_common_delete_option_enabled_under_header_manage_class() {
+		classpage2.isEnabledCommonDeleteBtn();
+	}
+
+	@When("admin clicks two or more checkboxes in the class module")
+	public void admin_clicks_two_or_more_checkboxes_in_the_class_module() {
+		classpage2.selectMultipleRowCheckBoxes();
+	}
+
+	@When("Click delete icon below {string} header  in the class module")
+	public void click_delete_icon_below_header_in_the_class_module(String string) {
+		classpage2.clickCommonDeleteBtnClass();
+	}
+
+	@Then("The respective rows in the table is deleted after clicking YES in confirm delete form  in the class module")
+	public void the_respective_rows_in_the_table_is_deleted_after_clicking_yes_in_confirm_delete_form_in_the_class_module()
+			throws InterruptedException {
+		classpage2.commonDeleteMultipleAlertConfirmYes();
+
+	}
+
+	@Then("The respective rows in the table is not deleted after clicking NO in confirm delete form  in the class module")
+	public void the_respective_rows_in_the_table_is_not_deleted_after_clicking_no_in_confirm_delete_form_in_the_class_module()
+			throws InterruptedException {
+		Assert.assertTrue(classpage2.commonDeleteMultipleAlertConfirmNo(),
+				"Selected Multiple Classes not successfully Deleted");
+	}
+
+	@Then("The respective row in the table is deleted after clicking YES in confirm delete form in the class module")
+	public void the_respective_row_in_the_table_is_deleted_after_clicking_yes_in_confirm_delete_form_in_the_class_module()
+			throws InterruptedException {
+		classpage2.commonDeleteAlertConfirmYes();
+
+	}
+
+	@Then("The respective row in the table is not Deleted after clicking NO in confirm delete form in the class module")
+	public void the_respective_row_in_the_table_is_not_deleted_after_clicking_no_in_confirm_delete_form_in_the_class_module()
+			throws InterruptedException {
+		Assert.assertTrue(classpage2.commonDeleteAlertConfirmNo(), "Selected Single Class not successfully Deleted");
+	}
+
 }
