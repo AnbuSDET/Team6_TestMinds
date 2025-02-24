@@ -13,19 +13,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-public class Utility_Methods {
-	
+public class Utility_Methods extends Constants{
+
 	public WebDriver driver;
-	
+	WebDriverWait webDriverWait;
+
 	public Utility_Methods(WebDriver driver) {
 		this.driver = driver;
-		PageFactory.initElements(driver, this);
-		this.driver = driver;		
+		// Utility for methods
+
+		webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(20));
 	}
-	
-	// Utility for methods	
-	
-	WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
 	public void waitForElement(WebElement element) {
 		webDriverWait.until(ExpectedConditions.visibilityOf(element));
@@ -173,20 +171,18 @@ public class Utility_Methods {
 		return false;
 	}
 
-	
-
-	public static String random5LetterWord(){
+	public String random5LetterWord() {
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 5; i++) {
-			int index = (int)(100 * Math.random()) % 25;
+			int index = (int) (100 * Math.random()) % 25;
 			sb.append(alphabet.charAt(index));
 		}
 		return sb.toString();
-		 
+
 	}
-	            
-    public String getPageTitle() {
+
+	public String getPageTitle() {
 		String title = driver.getTitle();
 		return title;
 	}
@@ -197,8 +193,17 @@ public class Utility_Methods {
 	}
     
 
-	public void assertText(WebElement element, String expected,String msg) {
-		Assert.assertTrue(getElementText(element).equals(expected),msg);
+	public void assertText(WebElement element, String expected, String msg) {
+		Assert.assertTrue(getElementText(element).equals(expected), msg);
+	}
+
+	public void clickUsingJS(WebElement element) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+	}
+
+	public WebElement waitUntilClickable(WebElement element, int timeoutInSeconds) {
+		return new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
+				.until(ExpectedConditions.elementToBeClickable(element));
 	}
 
     
@@ -244,12 +249,22 @@ public class Utility_Methods {
 	}
 	
 	
-
+	public void scrollIntoView(WebElement element) {
+		//WebElement element = driver.findElement(By.id("elementId"));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(true);", element);
 	
+	}
 	
+	public void openSpecificPage(String subPage) {
+		driver.get(configProp.getString("BaseUrl") + subPage);
+	}
 	
-	
-	
-   
+	public void validateAlertMessage(WebElement element, String expectedText) {
+		waitForElement(element);
+		String actualMsg = element.getText().replaceAll("\\s+", " ").trim();
+		String expectedMsg = expectedText.replaceAll("\\s+", " ").trim();
+		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);		
+	}
 
 }
