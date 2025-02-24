@@ -84,7 +84,7 @@ public class ClassSteps extends Constants {
 	@Then("Admin should see {string} in below of the data table in class")
 	public void admin_should_see_in_below_of_the_data_table_in_class(String string) {
 		// Write code here that turns the phrase above into concrete actions
-
+classPage.getFooterText(string);
 	}
 
 	@Given("Admin is on the Manage class page in class")
@@ -178,8 +178,10 @@ public class ClassSteps extends Constants {
 	}
 
 	@When("Admin clicks date picker")
-	public void admin_clicks_date_picker() {
+	public void admin_clicks_date_picker() throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
+		classPage.classBtnClick();
+		classPage.addNewClass();
 		classPage.selectCalendar();
 	}
 

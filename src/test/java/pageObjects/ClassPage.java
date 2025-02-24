@@ -45,6 +45,9 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//span[contains(text(),'Showing')]")
 	WebElement pageFooter;
+	
+	@FindBy(xpath = "//div[contains(@class,'p-datatable-footer')]")
+	WebElement footerText;
 
 	@FindBy(xpath = "//p-sorticon[@field = \"batchName\"]")
 	WebElement batchSortIcon;
@@ -78,9 +81,6 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//p-dropdown[@id = \"batchName\"]")
 	WebElement batchNameDrpDwnBox;
-
-//	@FindBy(xpath = "//li[@aria-label=\" + batchName + \"]")
-//	WebElement selectBatchName;
 
 	@FindBy(xpath = "//p-dropdown[@id = \"staffId\"]/div/div[@role=\"button\"]")
 	WebElement staffNameDrpDownIcon;
@@ -147,7 +147,7 @@ public class ClassPage extends Constants {
 	}
 
 	public void classBtnClick() throws InterruptedException {
-		Thread.sleep(500);
+		Thread.sleep(800);
 		util.clickUsingJS(util.waitUntilClickable(classLink, 20));
 		// util.openSpecificPage("session");
 	}
@@ -266,6 +266,11 @@ public class ClassPage extends Constants {
 			return true;
 		}
 		return false;
+	}
+	
+	public void getFooterText(String footText) {
+		Assert.assertTrue(footerText.getText().contains(footText));	 
+
 	}
 
 	public void addClass(String sheetName, String scenarioName) throws IOException, InterruptedException {

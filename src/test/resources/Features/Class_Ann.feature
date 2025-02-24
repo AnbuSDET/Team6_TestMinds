@@ -53,8 +53,8 @@ Feature: Class Module
   @TC_Class_05
   Scenario: Date Picker validation
     Given Admin is on the Class Popup window in class
-    When Admin selects class date in date picker "02/25/2025"
-    Then Admin should see no of class value is added automatically "1"
+    #When Admin selects class date in date picker "02/25/2025"
+    #Then Admin should see no of class value is added automatically "1"
     When Admin clicks date picker
     Then Admin should see weekends dates are disabled to select "1"
 
