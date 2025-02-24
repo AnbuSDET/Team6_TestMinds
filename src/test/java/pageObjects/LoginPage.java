@@ -47,7 +47,7 @@ public class LoginPage extends Constants {
 	}
 
 	public void getloginUrl() {
-		System.out.println("============baseURL================ " + Constants.baseURL);
+		
 		driver.get(baseURL);
 	}
 
@@ -60,10 +60,7 @@ public class LoginPage extends Constants {
 
 		String username = data.get(1);
 		String pass = data.get(2);
-
-		System.out.println("==================Username===== " + userName);
-		System.out.println("==================Password===== " + pass);
-
+		
 		userName.sendKeys(username);
 		password.sendKeys(pass);
 		wait = new WebDriverWait(driver, Duration.ofSeconds(30));

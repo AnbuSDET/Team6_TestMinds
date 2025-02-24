@@ -39,7 +39,7 @@ public class ProgramPage_Part2_Steps extends Constants {
 	//Add Program
 	
 	@When("Admin adds the program and click on save button from {string} with scenario name {string}")
-	public void admin_adds_the_program_and_click_on_save_button_from_with_scenario_name(String sheetName, String scenarioName) throws IOException {
+	public void admin_adds_the_program_and_click_on_save_button_from_with_scenario_name(String sheetName, String scenarioName) throws IOException, InterruptedException {
 		 programpage2.clickProgramAddBtn();
 		programpage2.enterValidProgramDetails(sheetName, scenarioName);
 	}
