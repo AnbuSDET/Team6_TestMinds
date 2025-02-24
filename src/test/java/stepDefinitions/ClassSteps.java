@@ -146,19 +146,19 @@ public class ClassSteps extends Constants {
 	@Then("Class not created and Admin gets error message below mandatory fields in red")
 	public void class_not_created_and_admin_gets_error_message_below_mandatory_fields_in_red() {
 		// Write code here that turns the phrase above into concrete actions
-
+		classPage.emptyFieldValidation();
 	}
 
 	@When("Admin clicks Cancel Icon on class Details form")
 	public void admin_clicks_cancel_icon_on_class_details_form() {
 		// Write code here that turns the phrase above into concrete actions
-
+classPage.clickCancelBtn();
 	}
 
 	@Then("Class Details popup window should be closed")
 	public void class_details_popup_window_should_be_closed() {
 		// Write code here that turns the phrase above into concrete actions
-
+classPage.verifyClassDetailsPopUpClosed();
 	}
 
 	@When("Admin selects class date in date picker {string}")

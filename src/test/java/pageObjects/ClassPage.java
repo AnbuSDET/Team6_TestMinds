@@ -111,15 +111,25 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//label[@for='classNo']")
 	WebElement classNumLabel;
-	
+
 	@FindBy(xpath = "//div[contains(@class,'p-toast-summary')]")
 	WebElement saveSuccessMsgPop;
-	
-	@FindBy(xpath = "(//small[@class='p-invalid ng-star-inserted'])[1]")
+
+	@FindBy(xpath = "//input[@id='classTopic']/following-sibling::small")
 	WebElement classTopicErrormsg;
 	
+	@FindBy(xpath = "//p-dropdown[@id='batchName']/following-sibling::small")
+	WebElement batchNameErrormsg;
+	
+	@FindBy(xpath = "//p-calendar[@inputid='icon']/following-sibling::small")
+	WebElement classDateErrormsg;
+
 	@FindBy(xpath = "//div[contains(@class, 'p-toast-detail')]")
 	WebElement alertmsg;
+	
+	@FindBy(xpath = "//div[contains(@class,'p-dialog-header')]")
+	WebElement classDetailsPopUpClosed;
+
 
 	public ClassPage(WebDriver driver) {
 		this.driver = driver;
@@ -266,7 +276,7 @@ public class ClassPage extends Constants {
 		WebElement batchNameDrpDwnIconBox = batchNameDrpDwnBox.findElement(By.xpath("./div/div[@role='button']"));
 		switch (scenarioName) {
 		case "validInputAll":
-		case "optionalInput":	
+		case "optionalInput":
 
 			if (batchNameDrpDwnIconBox.isDisplayed()) {
 				util.clickUsingJS(util.waitUntilClickable(batchNameDrpDwnIconBox, 50));
@@ -274,8 +284,9 @@ public class ClassPage extends Constants {
 						.findElement(By.xpath(".//span[text()=\"" + batchName + "\"]"));
 				util.clickUsingJS(util.waitUntilClickable(selectBatchName, 50));
 			}
+			String classTopicVal = data.get(2).isEmpty() ? "" : data.get(2) + util.random5LetterWord();
 
-			util.webSendKeys(classTopicInputBox, data.get(2) + util.random5LetterWord());
+			util.webSendKeys(classTopicInputBox, classTopicVal);
 			util.webSendKeys(classDescriptionInputBox, data.get(3) + util.random5LetterWord());
 			selectDate();
 
@@ -320,20 +331,19 @@ public class ClassPage extends Constants {
 		}
 
 	}
-		
 
 	public void selectDate() {
 		util.clickUsingJS(util.waitUntilClickable(calendar, 50));
 		util.clickUsingJS(util.waitUntilClickable(dateToSelect, 50));
 		util.clickUsingJS(util.waitUntilClickable(classNumLabel, 50));
 	}
-	
+
 	public String waitForToastAndGetText() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement toast = wait.until(ExpectedConditions.visibilityOf(saveSuccessMsgPop));
 		return toast.getText();
 	}
-	
+
 	public void ValSuccessToastMsg(String expectedSuccessmsg) {
 		System.out.println("ValSuccessToastMsg");
 		String successMsg = waitForToastAndGetText();
@@ -353,23 +363,32 @@ public class ClassPage extends Constants {
 		// Assert that the success message is either empty or null
 		Assert.assertTrue(successMsg == null || successMsg.isEmpty(), "No success message to be displayed");
 	}
-	
+
 	public void validateAddClass(String sheetname, String scenarioName) {
 		try {
-			if ((scenarioName.equals("optionalInput")) || (scenarioName.equals("InvalidInputMandatory")))
-					 {
-				util.scrollIntoView(classTopicErrormsg);
+			if ((scenarioName.equals("optionalInput")) || (scenarioName.equals("InvalidInputMandatory"))) {
+				util.scrollIntoView(classTopicInputBox);
+				util.waitForElement(classTopicErrormsg);
 				validateAddClassErrorMessage(classTopicErrormsg, "required");
 			} else {
-				List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
-				if (data.isEmpty()) {
-					Assert.fail("No data found for scenario: " + scenarioName);
-				}
-				util.validateAlertMessage(alertmsg, data.get(11));
+//				List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
+//				if (data.isEmpty()) {
+//					Assert.fail("No data found for scenario: " + scenarioName);
+//				}
+//				util.validateAlertMessage(alertmsg, data.get(11));
+				Assert.fail("Error in getting classTopicErrormsg ");
 			}
 		} catch (Exception e) {
 			Assert.fail("Error in getting alerts: " + e.getMessage());
 		}
+	}
+
+	public void emptyFieldValidation() {
+		
+		util.waitForElement(batchNameErrormsg);
+		validateAddClassErrorMessage(batchNameErrormsg, "required");
+		validateAddClassErrorMessage(classTopicErrormsg, "required");
+		validateAddClassErrorMessage(classDateErrormsg, "required");
 	}
 	
 	public void validateAddClassErrorMessage(WebElement element, String expectedText) {
@@ -378,6 +397,12 @@ public class ClassPage extends Constants {
 				"Expected error message containing: " + expectedText);
 	}
 	
-	
-	
+	public boolean verifyClassDetailsPopUpClosed() {
+		if (!classDetailsPopUpClosed.isDisplayed())
+		{
+			return true;
+		}
+		else return false;
+	}
+
 }
