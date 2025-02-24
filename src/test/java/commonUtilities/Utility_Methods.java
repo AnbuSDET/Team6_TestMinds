@@ -240,7 +240,7 @@ public class Utility_Methods {
 		waitForElement(element);
 		String actualMsg = element.getText().replaceAll("\\s+", " ").trim();
 		String expectedMsg = expectedText.replaceAll("\\s+", " ").trim();
-		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);
+		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);		
 	}
 	
 	

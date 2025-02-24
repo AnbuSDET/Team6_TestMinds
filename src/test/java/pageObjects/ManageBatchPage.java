@@ -127,7 +127,7 @@ public class ManageBatchPage extends Constants {
 	WebElement popUpBatchstatus;
 	
 	@FindBy(xpath="(//p-radiobutton[@name='category'])[1]") 
-	WebElement activeradioBtn;
+	 WebElement activeradioBtn;
 	
 	@FindBy(xpath="(//p-radiobutton[@name='category'])[2]") 
 	WebElement inactiveradioBtn;
@@ -425,8 +425,8 @@ public class ManageBatchPage extends Constants {
 			    public void popUp_ProgramName_Select()
 			    {	  
 			    	
-			    	String optionValue="BlogathonTesting";		
-			    	lms.setProgramName(optionValue);
+			    	//String optionValue="testingtesting";		
+			    	//lms.setProgramName(optionValue);
 			    			    	
 			    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			    	util.waitForElement(dialog);

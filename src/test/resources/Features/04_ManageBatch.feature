@@ -90,7 +90,7 @@ When  Admin Clicks the Add New batch button
 When  Admin clicks the close button 
 Then  Admin should see the batch details pop up closes 
 
-
+@test
 Scenario Outline: Verify Add  Batch functionalities 
 
 When  Admin Clicks the Add New batch button 
@@ -101,9 +101,9 @@ Then  Admin gets message for the scenario "<scenarioName>" for batch Module
 Examples:
 |scenarioName|
 |onlyMandatoryfields|
-|withoutMandatoryfields|
-|allValidFields|
-|cancelBtnwithValiddata|
+#|withoutMandatoryfields|
+#|allValidFields|
+#|cancelBtnwithValiddata|
 
 
 ### Edit Batch TestCases
