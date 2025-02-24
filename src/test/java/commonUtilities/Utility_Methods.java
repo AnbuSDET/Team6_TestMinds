@@ -1,18 +1,15 @@
 package commonUtilities;
 
 import java.time.Duration;
-
 import java.util.Comparator;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
@@ -21,8 +18,11 @@ public class Utility_Methods {
 	public WebDriver driver;
 	
 	public Utility_Methods(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
 		this.driver = driver;		
 	}
+	
 	// Utility for methods	
 	
 	WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -31,6 +31,7 @@ public class Utility_Methods {
 		webDriverWait.until(ExpectedConditions.visibilityOf(element));
 	}
 
+	
 	public static boolean validator(String actual, String expected) {
 
 		if (actual.equalsIgnoreCase(expected)) {
@@ -40,13 +41,7 @@ public class Utility_Methods {
 		}
 
 	}
-
-	public String getattribute(WebElement element, String name) {
-
-		String attributeValue = element.getAttribute(name);
-		System.out.println("Element's" + name + "atrribute value is: " + attributeValue);
-		return attributeValue;
-	}
+	
 
 	public String getElementText(WebElement ele) {
 		return ele.getText();
@@ -59,6 +54,8 @@ public class Utility_Methods {
 		return tagName;
 	}
 
+	// Element Display
+	
 	public boolean isElementDisplayed(WebElement element) {
 		boolean flag = false;
 		try {
@@ -81,6 +78,8 @@ public class Utility_Methods {
 		return flag;
 	}
 
+	// Element Enabled
+	
 	public boolean isElementEnabled(WebElement element) {
 		boolean flag = false;
 		try {
@@ -103,6 +102,8 @@ public class Utility_Methods {
 		return flag;
 	}
 
+	// sendKeys
+	
 	public boolean webSendKeys(WebElement element, String text) {
 		try {
 			WebElement ele = new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -127,6 +128,28 @@ public class Utility_Methods {
 		}
 		return false;
 	}
+	
+	// check element enabled in all rows or List
+	
+	public boolean elementVisible_allRows(List<WebElement> elementsList )
+	{				
+		for (WebElement element : elementsList) {
+	        webDriverWait.until(ExpectedConditions.visibilityOf(element));
+	    }
+        for (WebElement editIcon : elementsList) {        	
+        	
+            if (!editIcon.isEnabled()) {
+                System.out.println("Icons are enabled: " + editIcon.getText());
+                return false;
+            }
+        }
+        return true;		
+	}
+	
+		
+	
+	
+	// element Click
 
 	public boolean webElement_Click(WebElement element) {
 		try {
@@ -168,16 +191,16 @@ public class Utility_Methods {
 		return title;
 	}
    
-    
-    public String getElementAttribute(WebElement element,String attribute) {
-		WebElement textElement = new WebDriverWait(driver, Duration.ofSeconds(20))
-				.until(ExpectedConditions.visibilityOf(element));
-		return textElement.getAttribute(attribute);
+    public  String getPageCurrrentURL() {
+		String CurrentURL = driver.getCurrentUrl();
+		return CurrentURL;
 	}
+    
 
 	public void assertText(WebElement element, String expected,String msg) {
 		Assert.assertTrue(getElementText(element).equals(expected),msg);
 	}
+
     
 	public void clickUsingJS(WebElement element) {
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
@@ -217,7 +240,7 @@ public class Utility_Methods {
 		waitForElement(element);
 		String actualMsg = element.getText().replaceAll("\\s+", " ").trim();
 		String expectedMsg = expectedText.replaceAll("\\s+", " ").trim();
-		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);
+		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);		
 	}
 	
 	
@@ -228,4 +251,5 @@ public class Utility_Methods {
 	
 	
    
+
 }
