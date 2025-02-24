@@ -111,25 +111,27 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//label[@for='classNo']")
 	WebElement classNumLabel;
+		
+	@FindBy(id = "classNo")
+	WebElement classNumInputBox;
 
 	@FindBy(xpath = "//div[contains(@class,'p-toast-summary')]")
 	WebElement saveSuccessMsgPop;
 
 	@FindBy(xpath = "//input[@id='classTopic']/following-sibling::small")
 	WebElement classTopicErrormsg;
-	
+
 	@FindBy(xpath = "//p-dropdown[@id='batchName']/following-sibling::small")
 	WebElement batchNameErrormsg;
-	
+
 	@FindBy(xpath = "//p-calendar[@inputid='icon']/following-sibling::small")
 	WebElement classDateErrormsg;
 
 	@FindBy(xpath = "//div[contains(@class, 'p-toast-detail')]")
 	WebElement alertmsg;
-	
+
 	@FindBy(xpath = "//div[contains(@class,'p-dialog-header')]")
 	WebElement classDetailsPopUpClosed;
-
 
 	public ClassPage(WebDriver driver) {
 		this.driver = driver;
@@ -141,10 +143,11 @@ public class ClassPage extends Constants {
 
 		// util.clickUsingJS(util.waitUntilClickable(classLink, 20));
 		util.openSpecificPage("session");
+
 	}
 
-	public void classBtnClick() {
-
+	public void classBtnClick() throws InterruptedException {
+		Thread.sleep(500);
 		util.clickUsingJS(util.waitUntilClickable(classLink, 20));
 		// util.openSpecificPage("session");
 	}
@@ -338,6 +341,11 @@ public class ClassPage extends Constants {
 		util.clickUsingJS(util.waitUntilClickable(classNumLabel, 50));
 	}
 
+	public void verifyNoOfClasses(String noOfClasses) {
+		Assert.assertEquals(noOfClasses, classNumInputBox.getAttribute("ng-reflect-model"));		
+
+	}
+
 	public String waitForToastAndGetText() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement toast = wait.until(ExpectedConditions.visibilityOf(saveSuccessMsgPop));
@@ -384,25 +392,37 @@ public class ClassPage extends Constants {
 	}
 
 	public void emptyFieldValidation() {
-		
+
 		util.waitForElement(batchNameErrormsg);
 		validateAddClassErrorMessage(batchNameErrormsg, "required");
 		validateAddClassErrorMessage(classTopicErrormsg, "required");
 		validateAddClassErrorMessage(classDateErrormsg, "required");
 	}
-	
+
 	public void validateAddClassErrorMessage(WebElement element, String expectedText) {
 		util.waitForElement(element);
 		Assert.assertTrue(element.isDisplayed() && element.getText().contains(expectedText),
 				"Expected error message containing: " + expectedText);
 	}
-	
+
 	public boolean verifyClassDetailsPopUpClosed() {
-		if (!classDetailsPopUpClosed.isDisplayed())
-		{
+		if (!classDetailsPopUpClosed.isDisplayed()) {
 			return true;
-		}
-		else return false;
+		} else
+			return false;
+	}
+
+	public void selectCalendar() {
+		util.clickUsingJS(util.waitUntilClickable(calendar, 50));
+	}
+
+	public boolean isDateDisabled(String day) {
+
+		return driver.findElement(By.xpath("//span[text()='" + day + "' and contains(@class,'p-disabled')]")) != null;
+	}
+
+	public void validateIsDateDisabled(String day) {
+		Assert.assertEquals(true, isDateDisabled(day));
 	}
 
 }

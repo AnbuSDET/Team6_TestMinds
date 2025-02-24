@@ -2,6 +2,8 @@ package stepDefinitions;
 
 import java.io.IOException;
 
+import org.testng.Assert;
+
 import commonUtilities.Constants;
 import commonUtilities.Context;
 import io.cucumber.java.en.Given;
@@ -24,7 +26,7 @@ public class ClassSteps extends Constants {
 //}
 
 	@When("Admin clicks the {string} in the Header in class")
-	public void admin_clicks_the_in_the_header_in_class(String string) {
+	public void admin_clicks_the_in_the_header_in_class(String string) throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 		System.out.println("executing class01 scenario");
 		classPage.classBtnClick();
@@ -92,7 +94,7 @@ public class ClassSteps extends Constants {
 	}
 
 	@When("Admin clicks add new class under the class menu bar in class")
-	public void admin_clicks_add_new_class_under_the_class_menu_bar_in_class() {
+	public void admin_clicks_add_new_class_under_the_class_menu_bar_in_class() throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 
 		// classPage.clickSearchBar();
@@ -136,7 +138,7 @@ public class ClassSteps extends Constants {
 	}
 
 	@When("Admin clicks on save button without entering data")
-	public void admin_clicks_on_save_button_without_entering_data() {
+	public void admin_clicks_on_save_button_without_entering_data() throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 		classPage.classBtnClick();
 		classPage.addNewClass();
@@ -152,37 +154,39 @@ public class ClassSteps extends Constants {
 	@When("Admin clicks Cancel Icon on class Details form")
 	public void admin_clicks_cancel_icon_on_class_details_form() {
 		// Write code here that turns the phrase above into concrete actions
-classPage.clickCancelBtn();
+		classPage.clickCancelBtn();
 	}
 
 	@Then("Class Details popup window should be closed")
 	public void class_details_popup_window_should_be_closed() {
 		// Write code here that turns the phrase above into concrete actions
-classPage.verifyClassDetailsPopUpClosed();
+		classPage.verifyClassDetailsPopUpClosed();
 	}
 
 	@When("Admin selects class date in date picker {string}")
-	public void admin_selects_class_date_in_date_picker(String string) {
+	public void admin_selects_class_date_in_date_picker(String string) throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
-
+		classPage.classBtnClick();
+		classPage.addNewClass();
+		classPage.selectDate();
 	}
 
 	@Then("Admin should see no of class value is added automatically {string}")
 	public void admin_should_see_no_of_class_value_is_added_automatically(String string) {
 		// Write code here that turns the phrase above into concrete actions
-
+		classPage.verifyNoOfClasses(string);
 	}
 
 	@When("Admin clicks date picker")
 	public void admin_clicks_date_picker() {
 		// Write code here that turns the phrase above into concrete actions
-
+		classPage.selectCalendar();
 	}
 
 	@Then("Admin should see weekends dates are disabled to select {string}")
-	public void admin_should_see_weekends_dates_are_disabled_to_select(String string) {
+	public void admin_should_see_weekends_dates_are_disabled_to_select(String day) {
 		// Write code here that turns the phrase above into concrete actions
-
+		classPage.validateIsDateDisabled(day);
 	}
 
 	@When("admin enters only the optional field {string} and {string} and clicks save")

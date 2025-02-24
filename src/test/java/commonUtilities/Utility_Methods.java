@@ -258,6 +258,7 @@ public class Utility_Methods extends Constants{
 	
 	public void openSpecificPage(String subPage) {
 		driver.get(configProp.getString("BaseUrl") + subPage);
+		
 	}
 	
 	public void validateAlertMessage(WebElement element, String expectedText) {

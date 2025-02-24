@@ -49,14 +49,14 @@ Feature: Class Module
     Then Class not created and Admin gets error message below mandatory fields in red
     When Admin clicks Cancel Icon on class Details form
     Then Class Details popup window should be closed
-#
-  #@TC_Class_05
-  #Scenario: Date Picker validation
-    #Given Admin is on the Class Popup window in class
-    #When Admin selects class date in date picker "02/25/2025"
-    #Then Admin should see no of class value is added automatically "1"
-    #When Admin clicks date picker
-    #Then Admin should see weekends dates are disabled to select "12"
+
+  @TC_Class_05
+  Scenario: Date Picker validation
+    Given Admin is on the Class Popup window in class
+    When Admin selects class date in date picker "02/25/2025"
+    Then Admin should see no of class value is added automatically "1"
+    When Admin clicks date picker
+    Then Admin should see weekends dates are disabled to select "1"
 
   @TC_Class_06
   Scenario Outline: Class Details pop up Invalid Input verification with optional field
