@@ -26,9 +26,8 @@ public class ClassSteps extends Constants {
 //}
 
 	@When("Admin clicks the {string} in the Header in class")
-	public void admin_clicks_the_in_the_header_in_class(String string) throws InterruptedException {
+	public void admin_clicks_the_in_the_header_in_class(String classHeader) throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
-		System.out.println("executing class01 scenario");
 		classPage.classBtnClick();
 
 	}
@@ -54,12 +53,6 @@ public class ClassSteps extends Constants {
 	@Then("Admin should see the data table heading")
 	public void admin_should_see_the_data_table_heading(io.cucumber.datatable.DataTable dataTable) {
 		// Write code here that turns the phrase above into concrete actions
-		// For automatic transformation, change DataTable to one of
-		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		// Double, Byte, Short, Long, BigInteger or BigDecimal.
-		//
-		// For other transformations you can register a DataTableType.
 		classPage.columnHeaderTopic();
 	}
 
@@ -82,9 +75,9 @@ public class ClassSteps extends Constants {
 	}
 
 	@Then("Admin should see {string} in below of the data table in class")
-	public void admin_should_see_in_below_of_the_data_table_in_class(String string) {
+	public void admin_should_see_in_below_of_the_data_table_in_class(String footer) {
 		// Write code here that turns the phrase above into concrete actions
-classPage.getFooterText(string);
+classPage.getFooterText(footer);
 	}
 
 	@Given("Admin is on the Manage class page in class")
@@ -96,8 +89,6 @@ classPage.getFooterText(string);
 	@When("Admin clicks add new class under the class menu bar in class")
 	public void admin_clicks_add_new_class_under_the_class_menu_bar_in_class() throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
-
-		// classPage.clickSearchBar();
 
 		classPage.classBtnClick();
 		classPage.addNewClass();
@@ -123,12 +114,12 @@ classPage.getFooterText(string);
 	}
 
 	@When("Admin enters {string} and {string} mandatory fields in the form and clicks on save button in class")
-	public void admin_enters_and_mandatory_fields_in_the_form_and_clicks_on_save_button_in_class(String string,
-			String string2) throws IOException, InterruptedException {
+	public void admin_enters_and_mandatory_fields_in_the_form_and_clicks_on_save_button_in_class(String sheetName,
+			String scenarioName) throws IOException, InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 		classPage.classBtnClick();
 		classPage.addNewClass();
-		classPage.addClass(string, string2);
+		classPage.addClass(sheetName, scenarioName);
 	}
 
 	@Then("Admin gets message Class added Successfully in class")
@@ -164,7 +155,7 @@ classPage.getFooterText(string);
 	}
 
 	@When("Admin selects class date in date picker {string}")
-	public void admin_selects_class_date_in_date_picker(String string) throws InterruptedException {
+	public void admin_selects_class_date_in_date_picker(String classDate) throws InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 		classPage.classBtnClick();
 		classPage.addNewClass();
@@ -172,9 +163,9 @@ classPage.getFooterText(string);
 	}
 
 	@Then("Admin should see no of class value is added automatically {string}")
-	public void admin_should_see_no_of_class_value_is_added_automatically(String string) {
+	public void admin_should_see_no_of_class_value_is_added_automatically(String numOfClass) {
 		// Write code here that turns the phrase above into concrete actions
-		classPage.verifyNoOfClasses(string);
+		classPage.verifyNoOfClasses(numOfClass);
 	}
 
 	@When("Admin clicks date picker")
@@ -192,19 +183,19 @@ classPage.getFooterText(string);
 	}
 
 	@When("admin enters only the optional field {string} and {string} and clicks save")
-	public void admin_enters_only_the_optional_field_and_and_clicks_save(String string, String string2)
+	public void admin_enters_only_the_optional_field_and_and_clicks_save(String sheetName, String scenarioName)
 			throws IOException, InterruptedException {
 		// Write code here that turns the phrase above into concrete actions
 		classPage.classBtnClick();
 		classPage.addNewClass();
-		classPage.addClass(string, string2);
+		classPage.addClass(sheetName, scenarioName);
 	}
 
 	@Then("Class not created and Admin gets error message below mandatory fields in red for {string} and {string}")
-	public void class_not_created_and_admin_gets_error_message_below_mandatory_fields_in_red_for_and(String string,
-			String string2) {
+	public void class_not_created_and_admin_gets_error_message_below_mandatory_fields_in_red_for_and(String sheetName,
+			String scenarioName) {
 		// Write code here that turns the phrase above into concrete actions
-		classPage.validateAddClass(string, string2);
+		classPage.validateAddClass(sheetName, scenarioName);
 	}
 
 	@When("Admin clicks close button")
