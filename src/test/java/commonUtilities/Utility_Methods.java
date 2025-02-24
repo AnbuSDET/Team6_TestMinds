@@ -1,8 +1,11 @@
 package commonUtilities;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -29,6 +32,7 @@ public class Utility_Methods {
 		webDriverWait.until(ExpectedConditions.visibilityOf(element));
 	}
 
+	
 	public static boolean validator(String actual, String expected) {
 
 		if (actual.equalsIgnoreCase(expected)) {
@@ -38,8 +42,6 @@ public class Utility_Methods {
 		}
 
 	}
-	
-	
 	
 
 	public String getElementText(WebElement ele) {
@@ -53,6 +55,8 @@ public class Utility_Methods {
 		return tagName;
 	}
 
+	// Element Display
+	
 	public boolean isElementDisplayed(WebElement element) {
 		boolean flag = false;
 		try {
@@ -75,6 +79,8 @@ public class Utility_Methods {
 		return flag;
 	}
 
+	// Element Enabled
+	
 	public boolean isElementEnabled(WebElement element) {
 		boolean flag = false;
 		try {
@@ -97,6 +103,8 @@ public class Utility_Methods {
 		return flag;
 	}
 
+	// sendKeys
+	
 	public boolean webSendKeys(WebElement element, String text) {
 		try {
 			WebElement ele = new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -122,7 +130,7 @@ public class Utility_Methods {
 		return false;
 	}
 	
-	
+	// check element enabled in all rows or List
 	
 	public boolean elementVisible_allRows(List<WebElement> elementsList )
 	{				
@@ -139,6 +147,10 @@ public class Utility_Methods {
         return true;		
 	}
 	
+		
+	
+	
+	// element Click
 
 	public boolean webElement_Click(WebElement element) {
 		try {
@@ -191,9 +203,9 @@ public class Utility_Methods {
 	}
 	
 	 
-   
+	public void clickUsingJS(WebElement element) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+	}
     
-
-  
-   
+	
 }

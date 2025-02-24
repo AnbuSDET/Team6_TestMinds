@@ -4,6 +4,7 @@ import driverManager.DriverFactory;
 import pageObjects.ClassPage;
 import pageObjects.LoginPage;
 import pageObjects.ManageBatchPage;
+import pageObjects.Pagination;
 
 
 public class Context {
@@ -12,6 +13,7 @@ public class Context {
 	private LoginPage loginPage;
 	private ClassPage classPage;
 	private ManageBatchPage managebatchpage;
+	private Pagination pagination;
 	private Utility_Methods util;
 
 	public Context() {
@@ -19,8 +21,8 @@ public class Context {
 		loginPage = new LoginPage(driverFactory.setupDriver());
 		classPage = new ClassPage(driverFactory.setupDriver());
 	   managebatchpage = new ManageBatchPage(driverFactory.setupDriver());
+	   pagination= new Pagination(driverFactory.setupDriver());
 	   util= new  Utility_Methods(driverFactory.setupDriver());
-
 	}
 
 	public DriverFactory getDriverFactory() {
@@ -37,6 +39,11 @@ public class Context {
 	
 	public ManageBatchPage getmanagebatchpage() {
 		return managebatchpage;
+	}
+	
+	public Pagination getpagination()
+	{
+		return pagination;
 	}
 	
 	public Utility_Methods getUtils()
