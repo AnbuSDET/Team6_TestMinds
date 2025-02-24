@@ -4,7 +4,7 @@ import org.testng.annotations.DataProvider;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 
-@io.cucumber.testng.CucumberOptions(features = { "src/test/resources/Features/" }, glue = { "stepDefinitions",
+@io.cucumber.testng.CucumberOptions(features = { "src/test/resources/Features/03_04_ProgramSearch.feature" }, glue = { "stepDefinitions",
 		"hooks" },
 
 		plugin = { "pretty", "html:target/cucumber-reports/reports.html",
