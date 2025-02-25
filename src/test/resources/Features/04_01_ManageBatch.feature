@@ -75,10 +75,9 @@ Feature: Batch Module
     Examples: 
       | scenarioName        |
       | onlyMandatoryfields |
-
-  #|withoutMandatoryfields|
-  #|allValidFields|
-  #|cancelBtnwithValiddata|
+      |withoutMandatoryfields|
+      |allValidFields|
+      |cancelBtnwithValiddata|
   ### Edit Batch TestCases
   Scenario: Validate Edit icon feature in any row
     When Admin clicks the edit icon

@@ -15,7 +15,7 @@ import io.cucumber.testng.CucumberOptions;
 				"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm", "json:target/cucumber-reports/cucumber.json",
 				"junit:target/cucumber-reports/cucumber.xml",
 				"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
-				"rerun:target/rerun.txt" }, publish = true, tags = "@test")
+				"rerun:target/rerun.txt" }, publish = true, tags = "")
 
 
 
