@@ -258,4 +258,54 @@ public class ExcelReader {
 		fis.close();
 		return rowData;
 	}
+	
+	
+	@SuppressWarnings("resource")
+	public String getTestData(String sheetName, String testCase,String Entry) throws IOException {
+        XSSFWorkbook wb;
+        String cellValue = "";
+        File file = new File("src/test/resources/TestData/DataLMS.xlsx");  
+       
+        FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
+        wb = new XSSFWorkbook(fis); // creating Workbook instance that refers to .xlsx file
+        XSSFSheet sheet = wb.getSheet(sheetName);
+
+        for (Row row : sheet) {
+            Cell firstCell = row.getCell(0);      
+           
+            if(firstCell.getStringCellValue().equalsIgnoreCase("scenarioName"))
+            	continue;                
+            
+            if (null!= firstCell && firstCell.getStringCellValue().equalsIgnoreCase(testCase)) {
+            
+            	if(Entry== "username")
+            	{
+            		if(null !=row.getCell(1))
+            			cellValue= row.getCell(1).getStringCellValue();
+            		else
+            			cellValue = "";
+            				
+            	}
+            	   
+            	else if(Entry== "password")
+            	{
+            		if(null !=row.getCell(2))
+            			cellValue= row.getCell(2).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	else if(Entry== "ErrorMessage")
+            	{
+            		if(null !=row.getCell(3))
+            			cellValue= row.getCell(3).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	
+        }
+
+        wb.close(); 
+    }
+		return cellValue;
+}
 }

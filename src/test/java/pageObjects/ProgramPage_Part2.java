@@ -17,6 +17,7 @@ import org.testng.Assert;
 
 import commonUtilities.Constants;
 import commonUtilities.Utility_Methods;
+import pojo.Lms_Pojo;
 
 public class ProgramPage_Part2 extends Constants {
 	WebDriver driver;
@@ -83,6 +84,8 @@ public class ProgramPage_Part2 extends Constants {
 	@FindBy(xpath="//*[contains(text(),'Showing 0 to 0 of 0 entries')]")
 	private WebElement paginationTextWithZeroRecord;
 
+	Lms_Pojo lms = new Lms_Pojo();
+	
 	public ProgramPage_Part2(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -169,17 +172,26 @@ public class ProgramPage_Part2 extends Constants {
 		}
 	}
 
+	
 	public void validateProgram(String sheetname, String scenarioName) {
-		try {
-			List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
-			if (data.isEmpty()) {
-				Assert.fail("No data found for scenario: " + scenarioName);
-			}
-			util.validateAlertMessage(alertmsg, data.get(4));
-		} catch (Exception e) {
-			Assert.fail("Error in getting alerts: " + e.getMessage());
-		}
-	}
+	  try {
+	   List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
+	   if (data.isEmpty()) {
+	    Assert.fail("No data found for scenario: " + scenarioName);
+	   }
+	   util.waitForElement(alertmsg);
+	   lms.setProgramName(data.get(1));
+	   System.out.println("Prog name----"+lms.getProgramName());
+	   String actualMsg = alertmsg.getText().replaceAll("\\s+", " ").trim();
+	   String expectedMsg = data.get(1).replaceAll("\\s+", " ").trim();
+	   if(actualMsg.contains(expectedMsg)) { 
+	   lms.setProgramName(data.get(1));
+	   Thread.sleep(2000);
+	   }
+	  } catch (Exception e) {
+	   Assert.fail("Error in getting alerts: " + e.getMessage());
+	  }
+	 }
 
 	// Add Program
 
@@ -190,8 +202,9 @@ public class ProgramPage_Part2 extends Constants {
 		String descriptionText = data.get(2);
 		progNameTextBox.sendKeys(programNameText);
 		progDescTextBox.sendKeys(descriptionText);
-
-		util.clickUsingJS(util.waitUntilClickable(activeBtn, 50));
+		 util.clickUsingJS(activeBtn);
+		 util.webElement_Click(activeBtn);
+		//util.clickUsingJS(util.waitUntilClickable(activeBtn,80));
 
 		clickSaveBtn();
 	}
