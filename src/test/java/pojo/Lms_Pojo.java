@@ -5,7 +5,7 @@ public class Lms_Pojo {
 	
 	private static String programName;
 	private static String batchName1;
-	private static String batchName2;;
+	private static String batchName2;
 	
 	public static String getProgramName() {
 		return programName;
@@ -15,7 +15,7 @@ public class Lms_Pojo {
 		this.programName = programName;
 	}
 
-	public String getBatchName1() {
+	public static String getBatchName1() {
 		return batchName1;
 	}
 

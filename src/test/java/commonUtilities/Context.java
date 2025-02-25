@@ -5,11 +5,10 @@ import pageObjects.ClassPage;
 import pageObjects.ClassPage_Part2;
 import pageObjects.DashboardPage;
 import pageObjects.LoginPage;
-
+import pageObjects.LogoutPage;
 import pageObjects.ManageBatchPage;
 import pageObjects.Pagination;
-
-
+import pageObjects.ProgramPage;
 import pageObjects.ProgramPage_Part2;
 
 
@@ -26,6 +25,9 @@ public class Context {
 	private ClassPage_Part2 classpage2;
 	private ProgramPage_Part2 programpage2;
 	private DashboardPage dashboardpage;
+	private ProgramPage programpage;
+	private LogoutPage logoutPage;
+	
 
 
 	public Context() {
@@ -41,7 +43,8 @@ public class Context {
 		classpage2 = new ClassPage_Part2(driverFactory.setupDriver());
 		programpage2=new ProgramPage_Part2(driverFactory.setupDriver());
 		dashboardpage=new DashboardPage(driverFactory.setupDriver());
-
+		programpage=new ProgramPage(driverFactory.setupDriver());
+		logoutPage = new LogoutPage(driverFactory.setupDriver());
 
 	}
 
@@ -83,5 +86,13 @@ public class Context {
 	public DashboardPage getDashboardPage() {
 		return dashboardpage;
 	}
+	public ProgramPage getProgramPage() {
+		return programpage;
+	}
+	
+	
 
+	public LogoutPage getLogoutPage() {
+			return logoutPage;
+		}
 }
