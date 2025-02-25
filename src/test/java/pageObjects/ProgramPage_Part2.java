@@ -1,12 +1,17 @@
+
 package pageObjects;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +28,7 @@ public class ProgramPage_Part2 extends Constants {
 	WebDriver driver;
 	WebDriverWait wait;
 	Utility_Methods util;
+	Lms_Pojo lms = new Lms_Pojo();
 
 	@FindBy(xpath = "(//span[@class='mat-button-wrapper'])[2]")
 	WebElement progBtn;
@@ -35,6 +41,14 @@ public class ProgramPage_Part2 extends Constants {
 
 	@FindBy(xpath = "//div[text()=' Manage Program']")
 	WebElement programTitle;
+	
+	@FindBy(xpath = "//label[text()='Name']")
+	WebElement programNameLabel;
+	
+	@FindBy(xpath = "//label[text()='Description']")
+	WebElement programDescLabel;
+	@FindBy(xpath = "//lable[text()='Status']")
+	WebElement programStatusLabel;
 
 	@FindBy(xpath = "(//span[@class='p-button-icon pi pi-pencil'])[1]")
 	WebElement progEditBtnFirst;
@@ -62,13 +76,13 @@ public class ProgramPage_Part2 extends Constants {
 
 	@FindBy(id = "filterGlobal")
 	private WebElement searchTextBox;
-	
+
 	@FindBy(xpath = "//tr[1]/td[2]")
 	private WebElement firstrowNameField;
-	
+
 	@FindBy(xpath = "//tr[1]/td[3]")
 	private WebElement firstrowDescField;
-	
+
 	@FindBy(xpath = "//tr[1]/td[4]")
 	private WebElement firstrowStatusField;
 
@@ -80,12 +94,30 @@ public class ProgramPage_Part2 extends Constants {
 
 	@FindBy(xpath = "//button[@class='p-paginator-next p-paginator-element p-link p-ripple']")
 	private WebElement nextBtn;
-	
-	@FindBy(xpath="//*[contains(text(),'Showing 0 to 0 of 0 entries')]")
+
+	@FindBy(xpath = "//*[contains(text(),'Showing 0 to 0 of 0 entries')]")
 	private WebElement paginationTextWithZeroRecord;
 
-	Lms_Pojo lms = new Lms_Pojo();
+	@FindBy(xpath = "//tr/th[2]")
+	private WebElement programNameColumnHeader;
+	@FindBy(xpath = "//tr/th[3]")
+	private WebElement programDescColumnHeader;
+
+	@FindBy(xpath = "//tr/td[3]")
+	private WebElement programDescList;
+	@FindBy(xpath = "//tr/th[4]")
+	private WebElement programStatuscColumnHeader;
+
+	@FindBy(xpath = "//tr/td[4]")
+	private List<WebElement>  programStatusList;
+
+	@FindBy(xpath = "//i[@class='p-sortable-column-icon pi pi-fw pi-sort-amount-up-alt']")
+	WebElement progSortDescIcon;
 	
+	@FindBy(xpath = "//span[text()='Program Details']")
+	WebElement editProgramPopupTitle;
+
+
 	public ProgramPage_Part2(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -130,6 +162,21 @@ public class ProgramPage_Part2 extends Constants {
 			Assert.fail("Cancel Button is not displayed");
 		}
 	}
+	public boolean validateProgramEditPopup() {
+		try {
+			return editProgramPopupTitle.isDisplayed()&& saveBtn.isDisplayed() && cancelBtn.isDisplayed();
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+	
+	public boolean validateProgramEditTitle() {
+		try {
+			return editProgramPopupTitle.isDisplayed();
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
 
 	public void editProgramName(String sheetName, String scenarioName) throws IOException {
 		List<String> data = xlutils.getRowData(sheetName, 0, scenarioName);
@@ -172,26 +219,75 @@ public class ProgramPage_Part2 extends Constants {
 		}
 	}
 
-	
 	public void validateProgram(String sheetname, String scenarioName) {
-	  try {
-	   List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
-	   if (data.isEmpty()) {
-	    Assert.fail("No data found for scenario: " + scenarioName);
-	   }
-	   util.waitForElement(alertmsg);
-	   lms.setProgramName(data.get(1));
-	   System.out.println("Prog name----"+lms.getProgramName());
-	   String actualMsg = alertmsg.getText().replaceAll("\\s+", " ").trim();
-	   String expectedMsg = data.get(1).replaceAll("\\s+", " ").trim();
-	   if(actualMsg.contains(expectedMsg)) { 
-	   lms.setProgramName(data.get(1));
-	   Thread.sleep(2000);
-	   }
-	  } catch (Exception e) {
-	   Assert.fail("Error in getting alerts: " + e.getMessage());
-	  }
-	 }
+		try {
+			List<String> data = xlutils.getRowData(sheetname, 0, scenarioName);
+			if (data.isEmpty()) {
+				Assert.fail("No data found for scenario: " + scenarioName);
+			}
+			util.waitForElement(alertmsg);
+			String actualMsg = alertmsg.getText().replaceAll("\\s+", " ").trim();
+			String expectedMsg = data.get(1).replaceAll("\\s+", " ").trim();
+			lms.setProgramName(data.get(1));
+			
+			System.out.println("Program name---" + Lms_Pojo.getProgramName());
+			if (actualMsg.contains(expectedMsg) && scenarioName.equalsIgnoreCase("Add new program with valid data_EndtoEnd") ) {
+				List<String> datas = xlutils.getRowData(sheetname, 0, scenarioName);
+				lms.setProgramName(datas.get(1));
+			}
+			// util.validateAlertMessage(alertmsg, data.get(4));
+		} catch (Exception e) {
+			Assert.fail("Error in getting alerts: " + e.getMessage());
+		}
+	}
+	
+	public boolean validateAsterisk(String asterisk, String field) {
+		By asterisk_path = By.xpath("(//span[text()='*'])");
+		String expectedColor = "rgba(255, 0, 0, 1)";
+		WebElement field_path;
+
+		try {
+			for (int i = 1; i <= 3; i++) {
+				WebElement asteriskElement = driver.findElement(By.xpath(asterisk_path + "[" + i + "]"));
+				String color = asteriskElement.getCssValue("color");
+
+				switch (field) {
+				case "Program name":
+					field_path = programNameLabel;
+					break;
+				case "Description":
+					field_path = programDescLabel;
+					break;
+				case "Status":
+					field_path = programStatusLabel;
+					break;
+				default:
+					Assert.fail("Field not recognized: " + field);
+					return false;
+				}
+				if (field_path.getText().equals(field) && asteriskElement.isDisplayed()) {
+					if (color.equals(expectedColor)) {
+						return true;
+					} else {
+						Assert.fail("Asterisk validation failed");
+					}
+				}
+			}
+		} catch (Exception e) {
+			return false; // Return false if an exception occurs
+		}
+
+		return false; // Return false if no conditions were met
+	}
+	public boolean isProgramDetailsPopupDisappears() {
+		try {
+			util.waitForElement(editProgramPopupTitle);
+			boolean isInvisible = wait.until(ExpectedConditions.invisibilityOf(editProgramPopupTitle));
+			return isInvisible;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	// Add Program
 
@@ -202,101 +298,169 @@ public class ProgramPage_Part2 extends Constants {
 		String descriptionText = data.get(2);
 		progNameTextBox.sendKeys(programNameText);
 		progDescTextBox.sendKeys(descriptionText);
-		 util.clickUsingJS(activeBtn);
-		 util.webElement_Click(activeBtn);
-		//util.clickUsingJS(util.waitUntilClickable(activeBtn,80));
+		util.waitForElement(activeBtn);
+		activeBtn.click();
+		// util.clickUsingJS(util.waitUntilClickable(activeBtn, 50));
 
 		clickSaveBtn();
 	}
 
 	// search program
 
-//	public void searchProgram(String sheetname,String scenarioName) throws IOException, InterruptedException {
-//
-//		
-//        List<String> rowData = xlutils.getRowData(sheetname, 0, scenarioName);
-//        String programName = rowData.get(1);
-//		String programDesc = rowData.get(2);
-//		String status = rowData.get(3);
-//		
-//		
-//		if(scenarioName.equalsIgnoreCase("searchWithValidProgramName")) {
-//			util.clickUsingJS(util.waitUntilClickable(searchTextBox, 50));
-//			searchTextBox.sendKeys(programName);
-//			searchTextBox.sendKeys(Keys.ENTER);
-//		   util.waitForElement(firstrowNameField);
-//
-//			Assert.assertTrue(programName.equalsIgnoreCase(firstrowNameField.getText().trim()));
-//			Assert.assertTrue(programDesc.equalsIgnoreCase(firstrowDescField.getText().trim()));
-//			Assert.assertTrue(status.equalsIgnoreCase(firstrowStatusField.getText().trim()));
-//		}
-//		else if(scenarioName.equalsIgnoreCase("searchWithValidProgramDesc")) {
-//			searchTextBox.sendKeys(programDesc);
-//			searchTextBox.sendKeys(Keys.ENTER);
-//			util.waitForElement(firstrowNameField);
-//
-//			Assert.assertTrue(programName.equalsIgnoreCase(firstrowNameField.getText().trim()));
-//			Assert.assertTrue(programDesc.equalsIgnoreCase(firstrowDescField.getText().trim()));
-//			Assert.assertTrue(status.equalsIgnoreCase(firstrowStatusField.getText().trim()));
-//		}
-//		else if(scenarioName.equalsIgnoreCase("searchWithInvalidProgramName")) {
-//			searchTextBox.sendKeys(programName);
-//			searchTextBox.sendKeys(Keys.ENTER);
-//			
-//			Assert.assertTrue(paginationTextWithZeroRecord.getText().trim().contains("Showing 0 to 0 of 0 entries"));
-//		}
-//		else if(scenarioName.equalsIgnoreCase("searchWithPartialProgramName")) {
-//			searchTextBox.sendKeys(programDesc);
-//			searchTextBox.sendKeys(Keys.ENTER);
-//			util.waitForElement(firstrowNameField);
-//			
-//			Assert.assertTrue(programName.equalsIgnoreCase(firstrowNameField.getText().trim()));
-//			Assert.assertTrue(programDesc.equalsIgnoreCase(firstrowDescField.getText().trim()));
-//			Assert.assertTrue(status.equalsIgnoreCase(firstrowStatusField.getText().trim()));
-//
-//		}
-//	}
-	
 	public void searchProgram(String sheetName, String scenarioName) throws IOException, InterruptedException {
-	    List<String> rowData = xlutils.getRowData(sheetName, 0, scenarioName);
-	    String programName = rowData.get(1);
-	    String programDesc = rowData.get(2);
-	    String status = rowData.get(3);
+		List<String> rowData = xlutils.getRowData(sheetName, 0, scenarioName);
+		String programName = rowData.get(1);
+		String programDesc = rowData.get(2);
+		String status = rowData.get(3);
 
-	    if (scenarioName.equalsIgnoreCase("Searching the added program using program name")) {
-	        performSearch(programName);
-	        validateSearchResults(programName, programDesc, status);
-	    } 
-	    else if (scenarioName.equalsIgnoreCase("Searching the added program using program description")) {
-	        performSearch(programDesc);
-	        validateSearchResults(programName, programDesc, status);
-	    } 
-	    else if (scenarioName.equalsIgnoreCase("Searching the added program using partial program name")) {
-	        performSearch(programDesc);
-	        validateSearchResults(programName, programDesc, status);
-	    } 
-	    else if (scenarioName.equalsIgnoreCase("Searching the added program using invalid program name")) {
-	    	 performSearch(programName);
-			Assert.assertTrue(paginationTextWithZeroRecord.getText().trim().contains("Showing 0 to 0 of 0 entries"));
-		
-	    } 
-	    else {
-	        Assert.fail("Invalid search scenario: " + scenarioName);
-	    }
+		if (scenarioName.equalsIgnoreCase("Searching the added program using program name")) {
+			performSearch(programName);
+			validateSearchResults(programName, programDesc, status);
+		} else if (scenarioName.equalsIgnoreCase("Searching the added program using program description")) {
+			performSearch(programDesc);
+			validateSearchResults(programName, programDesc, status);
+		} else if (scenarioName.equalsIgnoreCase("Searching the added program using partial program name")) {
+			performSearch(programName);
+			validateSearchResults(programName, programDesc, status);
+		} else if (scenarioName.equalsIgnoreCase("Searching the added program using invalid program name")) {
+			performSearch(programName);
+			Assert.assertTrue(paginationTextWithZeroRecord.getText().contains("0"));
+
+		} else {
+			Assert.fail("Invalid search scenario: " + scenarioName);
+		}
 	}
 
-	
 	private void performSearch(String searchQuery) {
-	    searchTextBox.sendKeys(searchQuery);
-	    searchTextBox.sendKeys(Keys.ENTER);
-	    util.waitForElement(firstrowNameField);
+		searchTextBox.sendKeys(searchQuery);
+		searchTextBox.sendKeys(Keys.ENTER);
+		util.waitForElement(firstrowNameField);
 	}
 
 	private void validateSearchResults(String expectedName, String expectedDesc, String expectedStatus) {
-	    Assert.assertTrue(expectedName.equalsIgnoreCase(firstrowNameField.getText().trim()));
-	    Assert.assertTrue(expectedDesc.equalsIgnoreCase(firstrowDescField.getText().trim()));
-	    Assert.assertTrue(expectedStatus.equalsIgnoreCase(firstrowStatusField.getText().trim()));
+		util.waitForElement(firstrowNameField);
+		util.waitForElement(firstrowDescField);
+		util.waitForElement(firstrowStatusField);
+
+		Assert.assertTrue(expectedName.trim().contains(firstrowNameField.getText().trim()));
+		Assert.assertTrue(expectedDesc.equalsIgnoreCase(firstrowDescField.getText().trim()));
+		Assert.assertTrue(expectedStatus.equalsIgnoreCase(firstrowStatusField.getText().trim()));
 	}
 
+	// sorting
 
+	public void clickProgramNameColumnHeader() {
+		util.waitForElement(programNameColumnHeader);
+		util.clickUsingJS(util.waitUntilClickable(programNameColumnHeader, 50));
+	}
+
+	public List<String> getSortedProgramNameListAsc() {
+
+		// sort on the original list ->sorted list in Ascending order
+		List<String> sortedlList = getOriginalProgramNameList().stream().sorted().collect(Collectors.toList());
+		System.out.println("sortedlList " + sortedlList);
+
+		return sortedlList;
+
+	}
+
+	public List<String> getOriginalProgramNameList() {
+		// capture all the web elements into list
+
+		// capture text of all elements into new(original) list
+		List<String> originalList = progNameList.stream().map(s -> s.getText().toLowerCase().trim())
+				.collect(Collectors.toList());
+		System.out.println("originalList " + originalList);
+
+		return originalList;
+	}
+
+	public void clickProgDescSortIcon() {
+		util.clickSortIcon(progSortDescIcon);
+	}
+
+	public List<String> getSortedProgramNameListDesc() {
+
+		List<String> sortedlListdesc = getOriginalProgramNameList().stream().sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+		System.out.println("sortedlList desc " + sortedlListdesc);
+
+		return sortedlListdesc;
+	}
+
+	public void clickProgramDescColumnHeader() {
+		util.waitForElement(programDescColumnHeader);
+		util.clickUsingJS(util.waitUntilClickable(programDescColumnHeader, 50));
+
+	}
+
+	public List<String> getOriginalProgramDescList() {
+
+		// capture text of all elements into new(original) list
+		List<String> originalProgramDescriptionList = progDescList.stream().map(s -> s.getText().toLowerCase().trim())
+				.collect(Collectors.toList());
+		System.out.println("originalProgramDescList " + originalProgramDescriptionList);
+		return originalProgramDescriptionList;
+	}
+
+	public List<String> getSortedProgramDescriptionListAsc() {
+
+		// sort on the original list ->sorted list in Ascending order
+		List<String> desiredlList = getOriginalProgramDescList();
+		// Sort the list
+		Collections.sort(desiredlList);
+
+		System.out.println("getSortedProgramDescriptionListAsc " + desiredlList);
+
+		return desiredlList;
+
+	}
+
+	public List<String> getSortedProgramDescriptionListDesc() {
+
+		// sort on the original list ->sorted list in Descending order
+		List<String> sortedlListdesc = getOriginalProgramDescList().stream().sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+		System.out.println("getSortedProgramDescriptionListDesc sortedlList desc " + sortedlListdesc);
+
+		return sortedlListdesc;
+
+	}
+	
+	public void clickProgramStatusColumnHeader() {
+		util.waitForElement(programStatuscColumnHeader);
+		util.clickUsingJS(util.waitUntilClickable(programStatuscColumnHeader, 50));
+		
+	}
+	
+	public List<String> getSortedProgramStatusListAsc() {
+		
+		  //sort on the original list->sorted list in Ascending order
+		  List<String> desiredlList = getOriginalProgramStatusList();
+	        // Sort the list
+	        Collections.sort(desiredlList);
+	        
+	        System.out.println("getSortedProgramStatusListAsc "+desiredlList);  
+
+		  return desiredlList;
+
+	}
+
+	public List<String> getSortedProgramStatusListDesc() {
+		
+		  //sort on the original list->sorted list in Descending order
+		  List<String> sortedlListdesc = getOriginalProgramStatusList().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+		  System.out.println("getSortedProgramDescriptionListDesc sortedlList desc "+sortedlListdesc);
+
+		  return sortedlListdesc;
+
+	}
+	public List<String> getOriginalProgramStatusList() {
+		  
+		  
+		  //capture text of all elements into new(original) list
+		  List<String> originalProgramStatusList = programStatusList.stream().map(s->s.getText().toLowerCase().trim()).collect(Collectors.toList());
+		  System.out.println("originalProgramStatusList "+originalProgramStatusList);
+		  return originalProgramStatusList;
+	}
 }

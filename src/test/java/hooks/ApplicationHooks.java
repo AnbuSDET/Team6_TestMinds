@@ -6,13 +6,14 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import commonUtilities.Constants;
 import driverManager.DriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
-public class ApplicationHooks {
+public class ApplicationHooks extends Constants{
 
 	private DriverFactory driverFactory;
 	private WebDriver driver;
@@ -22,7 +23,7 @@ public class ApplicationHooks {
 	public void launchBrowser() {
 		System.out.println("=========launchBrowser=======================");
 		driverFactory = DriverFactory.getInstance();
-		driverFactory.setupDriver();
+		driverFactory.setupDriver(configProp.getString("browser"));
 	}
 
 	@AfterStep

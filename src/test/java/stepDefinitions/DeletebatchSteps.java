@@ -3,6 +3,8 @@ package stepDefinitions;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.IOException;
+
 import commonUtilities.Context;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -43,7 +45,7 @@ public class DeletebatchSteps {
 	   // 
 	   
 	   @When("Admin clicks on the delete icon and click yes button")
-	   public void admin_clicks_on_the_delete_icon_and_click_yes_button() throws InterruptedException {
+	   public void admin_clicks_on_the_delete_icon_and_click_yes_button() throws InterruptedException, IOException {
 		   managebatchPage.click_DeleteBatchusingSearch();
 		   managebatchPage.Click_batchDelYesBtn();
 		   

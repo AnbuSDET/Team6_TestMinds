@@ -272,43 +272,43 @@ public class ClassPage_Part2_Steps extends Constants {
 		classpage2.selectClassFirstRowCheckBox();
 	}
 
-	@Then("Admin should see common delete option enabled under header Manage class")
+	@Then("Admin should see common delete option")
 	public void admin_should_see_common_delete_option_enabled_under_header_manage_class() {
 		classpage2.isEnabledCommonDeleteBtn();
 	}
 
-	@When("admin clicks two or more checkboxes in the class module")
+	@When("admin clicks two or more checkboxes")
 	public void admin_clicks_two_or_more_checkboxes_in_the_class_module() {
 		classpage2.selectMultipleRowCheckBoxes();
 	}
 
-	@When("Click delete icon below {string} header  in the class module")
+	@When("Click delete icon below {string} header")
 	public void click_delete_icon_below_header_in_the_class_module(String string) {
 		classpage2.clickCommonDeleteBtnClass();
 	}
 
-	@Then("The respective rows in the table is deleted after clicking YES in confirm delete form  in the class module")
+	@Then("The respective rows in the table is deleted after clicking YES in confirm delete form")
 	public void the_respective_rows_in_the_table_is_deleted_after_clicking_yes_in_confirm_delete_form_in_the_class_module()
 			throws InterruptedException {
 		classpage2.commonDeleteMultipleAlertConfirmYes();
 
 	}
 
-	@Then("The respective rows in the table is not deleted after clicking NO in confirm delete form  in the class module")
+	@Then("The respective rows in the table is not deleted after clicking NO in confirm delete form")
 	public void the_respective_rows_in_the_table_is_not_deleted_after_clicking_no_in_confirm_delete_form_in_the_class_module()
 			throws InterruptedException {
 		Assert.assertTrue(classpage2.commonDeleteMultipleAlertConfirmNo(),
 				"Selected Multiple Classes not successfully Deleted");
 	}
 
-	@Then("The respective row in the table is deleted after clicking YES in confirm delete form in the class module")
+	@Then("The respective row in the table is deleted after clicking YES in confirm delete form")
 	public void the_respective_row_in_the_table_is_deleted_after_clicking_yes_in_confirm_delete_form_in_the_class_module()
 			throws InterruptedException {
 		classpage2.commonDeleteAlertConfirmYes();
 
 	}
 
-	@Then("The respective row in the table is not Deleted after clicking NO in confirm delete form in the class module")
+	@Then("The respective row in the table is not Deleted after clicking NO in confirm delete form")
 	public void the_respective_row_in_the_table_is_not_deleted_after_clicking_no_in_confirm_delete_form_in_the_class_module()
 			throws InterruptedException {
 		Assert.assertTrue(classpage2.commonDeleteAlertConfirmNo(), "Selected Single Class not successfully Deleted");
