@@ -30,10 +30,10 @@ public class DriverFactory extends Constants {
     	 driver.remove();
     }
 
-	public WebDriver setupDriver() {
+	public WebDriver setupDriver(String browser) {
         if (driver.get() == null) {
         	System.out.println("setting the driver");
-            String browser = configProp.getString("browser");
+          //  String browser = configProp.getString("browser");
             System.out.println("browser value is:" + browser);
             switch (browser) {
                 case "firefox":

@@ -6,9 +6,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 
-
-@CucumberOptions(features = { "src/test/resources/Features" }, glue = { "stepDefinitions",
-
+@CucumberOptions(features = { "src/test/resources/Features" }, glue = {"stepDefinitions",
 		"hooks" },
 
 		plugin = { "pretty", "html:target/cucumber-reports/reports.html",
@@ -16,9 +14,6 @@ import io.cucumber.testng.CucumberOptions;
 				"junit:target/cucumber-reports/cucumber.xml",
 				"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
 				"rerun:target/rerun.txt" }, publish = true, tags = "")
-
-
-
 
 public class TestRunner extends AbstractTestNGCucumberTests {
 

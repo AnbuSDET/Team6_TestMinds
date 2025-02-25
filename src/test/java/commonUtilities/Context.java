@@ -12,7 +12,7 @@ import pageObjects.ProgramPage;
 import pageObjects.ProgramPage_Part2;
 
 
-public class Context {
+public class Context extends Constants{
 
 	private DriverFactory driverFactory;
 	private LoginPage loginPage;
@@ -32,19 +32,19 @@ public class Context {
 
 	public Context() {
 		driverFactory = DriverFactory.getInstance();
-		loginPage = new LoginPage(driverFactory.setupDriver());
-		classPage = new ClassPage(driverFactory.setupDriver());
+		loginPage = new LoginPage(driverFactory.setupDriver(configProp.getString("browser")));
+		classPage = new ClassPage(driverFactory.setupDriver(configProp.getString("browser")));
 		System.out.println("setting up driver in context");
 
-	   managebatchpage = new ManageBatchPage(driverFactory.setupDriver());
-	   pagination= new Pagination(driverFactory.setupDriver());
-	   util= new  Utility_Methods(driverFactory.setupDriver());
+	   managebatchpage = new ManageBatchPage(driverFactory.setupDriver(configProp.getString("browser")));
+	   pagination= new Pagination(driverFactory.setupDriver(configProp.getString("browser")));
+	   util= new  Utility_Methods(driverFactory.setupDriver(configProp.getString("browser")));
 
-		classpage2 = new ClassPage_Part2(driverFactory.setupDriver());
-		programpage2=new ProgramPage_Part2(driverFactory.setupDriver());
-		dashboardpage=new DashboardPage(driverFactory.setupDriver());
-		programpage=new ProgramPage(driverFactory.setupDriver());
-		logoutPage = new LogoutPage(driverFactory.setupDriver());
+		classpage2 = new ClassPage_Part2(driverFactory.setupDriver(configProp.getString("browser")));
+		programpage2=new ProgramPage_Part2(driverFactory.setupDriver(configProp.getString("browser")));
+		dashboardpage=new DashboardPage(driverFactory.setupDriver(configProp.getString("browser")));
+		programpage=new ProgramPage(driverFactory.setupDriver(configProp.getString("browser")));
+		logoutPage = new LogoutPage(driverFactory.setupDriver(configProp.getString("browser")));
 
 	}
 

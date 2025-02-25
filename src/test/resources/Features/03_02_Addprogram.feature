@@ -62,7 +62,7 @@ Feature: Addnew Programpage
       | sheetName  | ScenarioName         | status |
       | AddProgram | Verify select Status | Active |
 
-@test
+
   Scenario Outline: Verify Add program
     When Admin adds the program and click on save button from "<sheetName>" with scenario name "<scenarioName>"
     Then Admin gets message for new program for each "<sheetName>" and  "<scenarioName>"

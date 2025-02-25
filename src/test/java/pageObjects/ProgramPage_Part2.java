@@ -229,9 +229,11 @@ public class ProgramPage_Part2 extends Constants {
 			String actualMsg = alertmsg.getText().replaceAll("\\s+", " ").trim();
 			String expectedMsg = data.get(1).replaceAll("\\s+", " ").trim();
 			lms.setProgramName(data.get(1));
+			
 			System.out.println("Program name---" + Lms_Pojo.getProgramName());
-			if (actualMsg.contains(expectedMsg)) {
-				lms.setProgramName(data.get(1));
+			if (actualMsg.contains(expectedMsg) && scenarioName.equalsIgnoreCase("Add new program with valid data_EndtoEnd") ) {
+				List<String> datas = xlutils.getRowData(sheetname, 0, scenarioName);
+				lms.setProgramName(datas.get(1));
 			}
 			// util.validateAlertMessage(alertmsg, data.get(4));
 		} catch (Exception e) {

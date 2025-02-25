@@ -399,14 +399,10 @@ public class ManageBatchPage extends Constants {
 		}
 	}
 
-	public void popUp_ProgramName_Select() throws IOException {
-		// String optionValue="testingtesting";
-		// lms.setProgramName(optionValue);
+	public void popUp_ProgramName_Select() throws IOException {		
 
 		List<String> data = xlutils.getRowData("Program", 0, "Add new program with valid data");
-		lms.setProgramName(data.get(1));
-
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		lms.setProgramName(data.get(1));		
 		util.waitForElement(dialog);
 		util.webElement_Click(programNameDropdowntrigger);
 
@@ -432,6 +428,38 @@ public class ManageBatchPage extends Constants {
 
 		}
 
+	}
+	
+	
+	public void EndtoEndProgramSelct() throws IOException
+	{
+		List<String> data = xlutils.getRowData("Program", 0, "Add new program with valid data_EndtoEnd");
+		lms.setProgramName(data.get(1));
+		
+		util.waitForElement(dialog);
+		util.webElement_Click(programNameDropdowntrigger);
+
+		boolean optionFound = false;
+		while (!optionFound) {
+
+			// Get all drop down options
+
+			List<WebElement> options = driver.findElements(By.cssSelector(".p-dropdown-item"));
+
+			// Check if any options match the desired text
+			for (WebElement option : options) {
+				if (option.getText().equals(Lms_Pojo.getProgramName())) {
+					option.click();
+					optionFound = true;
+					return;
+				}
+			}
+
+			// If not found, scroll down
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollTop = arguments[0].scrollHeight",
+					programNameDropdowntrigger);
+
+		}
 	}
 
 	public boolean batchNamePrefixValidation() {
@@ -502,8 +530,13 @@ public class ManageBatchPage extends Constants {
 			util.webElement_Click(popUpBatchcancelBtn);
 			break;
 
+		case "onlyMandatoryfieldsEndToEnd":
+			EndtoEndProgramSelct();
+			addBatchValidDetails(ScenarioName);
+			util.webElement_Click(popUpBatchsaveBtn);
+			break;
+		
 		default:
-
 			break;
 		}
 	}
@@ -553,6 +586,15 @@ public class ManageBatchPage extends Constants {
 				returnValue = true;
 			}
 			break;
+		case "onlyMandatoryfieldsEndToEnd":
+			((JavascriptExecutor) driver).executeScript("arguments[0].click();", batchcreation_SucessMesg);
+			SuccessMesg = batchcreation_SucessMesg.getText();
+			if (batchcreation_SucessMesg.isDisplayed()) {
+				if (SuccessMesg.contains(data.get(4)))
+					lms.setBatchName1(Lms_Pojo.getProgramName() + data.get(3));
+				System.out.println("Batch Name:" + Lms_Pojo.getBatchName1());
+				returnValue = true;
+			}
 		}
 
 		return returnValue;
@@ -675,11 +717,16 @@ public class ManageBatchPage extends Constants {
 
 	// delete yes Validation
 
-	public void click_DeleteBatchusingSearch() {
+	public void click_DeleteBatchusingSearch() throws IOException {
 		batchNameBeforeClick = printlistofbatchName();
 		actions.sendKeys(Keys.ESCAPE).perform();
-		lms.setBatchName2("TestingforDelete1");
-		util.webSendKeys(batchSearchBtn, lms.getBatchName2());
+		
+		List<String> data = xlutils.getRowData("Batch", 0, "deleteBatch");	
+		
+		lms.setBatchName2("TeamTitanEndtoEnd90");
+		
+		util.webSendKeys(batchSearchBtn, data.get(5));
+		
 		actions.sendKeys(Keys.TAB).perform();
 		js.executeScript("arguments[0].click();", singlecheckbox);
 		WebElement delbtn = driver

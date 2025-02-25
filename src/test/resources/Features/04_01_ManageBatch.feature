@@ -66,7 +66,7 @@ Feature: Batch Module
     When Admin clicks the close button
     Then Admin should see the batch details pop up closes
 
-  @test
+
   Scenario Outline: Verify Add  Batch functionalities
     When Admin Clicks the Add New batch button
     Then Admin Adds new Batch and click on save button for the scenario "<scenarioName>" in batch module
@@ -78,6 +78,7 @@ Feature: Batch Module
       |withoutMandatoryfields|
       |allValidFields|
       |cancelBtnwithValiddata|
+      
   ### Edit Batch TestCases
   Scenario: Validate Edit icon feature in any row
     When Admin clicks the edit icon
