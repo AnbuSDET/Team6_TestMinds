@@ -7,7 +7,7 @@ Feature: program Module
     When Admin clicks the program menu from the header
     Then Admin should land on the program page
 
-  Scenario: Validate "Title" in Batch Page
+  Scenario: Validate "Title" in program Page
     Then Admin should see the "LMS" Title
 
   Scenario: Verify Logout displayed in menu bar
