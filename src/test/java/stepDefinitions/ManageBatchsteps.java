@@ -45,7 +45,7 @@ public class ManageBatchsteps {
 
 	//	Validate "Title" in Batch Page
 
-	@Then("Admin should see the {string} Title")
+	@Then("Admin should see the {string} Title BM")
 	public void admin_should_see_the_title(String title) {	
 		
 		Assert.assertEquals(managebatchPage.TitleValidation().contains(title),true);
@@ -128,7 +128,7 @@ public class ManageBatchsteps {
    // Validate batch name prefix selected program name
    
    @When("Admin selects the program name in the dropdown")
-   public void admin_selects_the_program_name_in_the_dropdown() {
+   public void admin_selects_the_program_name_in_the_dropdown() throws IOException {
 	   managebatchPage.popUp_ProgramName_Select();
 	   
    }
@@ -266,12 +266,11 @@ public class ManageBatchsteps {
        assertFalse("Double arrow left button should be disabled", results[0]);
 	     assertFalse("back button should be disabled", results[1]);
    }
-   
+
    @Then("Admin searches by valid batch name with {string} and {string} in the batch module")
    public void admin_searches_by_valid_batch_name_with_and_in_the_batch_module(String sheetName, String scenarioName) throws IOException, InterruptedException {
        // Write code here that turns the phrase above into concrete actions
 	   managebatchPage.searchBatch(sheetName, scenarioName);
    }
- 
   
 }

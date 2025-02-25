@@ -37,6 +37,12 @@ public class ManageBatchPage extends Constants {
 	Utility_Methods util;
 	WebDriverWait wait;	
 	
+	@FindBy(id = "filterGlobal")
+	private WebElement searchTextBox;
+	
+	@FindBy(xpath = "//tr[1]/td[2]")
+	private WebElement firstrowNameField;
+	
 	@FindBy(xpath="//span[text()='Batch']") 
 	WebElement batchinMenuBar;
 	
@@ -432,11 +438,16 @@ public class ManageBatchPage extends Constants {
 			    
 			    	   
 			    
-			    public void popUp_ProgramName_Select()
+			    public void popUp_ProgramName_Select() throws IOException
 			    {	  			    	
 			    	//String optionValue="testingtesting";		
 			    	//lms.setProgramName(optionValue);
-			    			    	
+			    
+			    	List<String> data = xlutils.getRowData("Program", 0, "Add new program with valid data");
+			    	lms.setProgramName(data.get(1));
+			    	
+			    		
+
 			    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			    	util.waitForElement(dialog);
 			    	util.webElement_Click(programNameDropdowntrigger);			
@@ -450,7 +461,7 @@ public class ManageBatchPage extends Constants {
 
 			            // Check if any options match the desired text
 			            for (WebElement option : options) {
-			                if (option.getText().equals(lms.getProgramName())) {
+			                if (option.getText().equals(Lms_Pojo.getProgramName())) {
 			                    option.click(); 
 			                    optionFound = true;
 			                    return; 
@@ -469,7 +480,7 @@ public class ManageBatchPage extends Constants {
 			    {
 			        //WebElement inputField = driver.findElement(By.id("batchProg"));
 		            String text=popUpBatchname_Prefix.getAttribute("value");		            
-			        return 	text.contains(lms.getProgramName());
+			        return 	text.contains(Lms_Pojo.getProgramName());
 			    
 			    }
 			    
@@ -537,11 +548,13 @@ public void addBatchValidDetails(String Scenario) throws IOException
 			        	 addBatchValidDetails(ScenarioName);			        
 			             util.webElement_Click(popUpBatchsaveBtn);
 			            break;
+			            
 			        case "cancelBtnwithValiddata":  
 			        	 popUp_ProgramName_Select();
 			        	 addBatchValidDetails(ScenarioName);			         	
 			             util.webElement_Click(popUpBatchcancelBtn);
 			            break; 
+			            
 
 			        default:
 			           
@@ -563,7 +576,7 @@ public void addBatchValidDetails(String Scenario) throws IOException
 			        	if(batchcreation_SucessMesg.isDisplayed()) {   
 			        	      if (SuccessMesg.contains(data.get(4)))
 			        	    	  lms.setBatchName1(Lms_Pojo.getProgramName()+data.get(3));
-			        	       System.out.println("Batch Name:"+lms.getBatchName1());			        	      
+			        	       System.out.println("Batch Name:"+Lms_Pojo.getBatchName1());			        	      
 			        	       returnValue = true;	
 			        	}
 							   break;
@@ -853,6 +866,23 @@ public void addBatchValidDetails(String Scenario) throws IOException
 
 						}
 		       
+				  public void searchBatch(String sheetName, String scenarioName) throws IOException, InterruptedException {
+					    List<String> rowData = xlutils.getRowData(sheetName, 0, scenarioName);
+					    String batchName = rowData.get(5);
+	
+					    if (scenarioName.equalsIgnoreCase("Search with valid batch name")) {
+					        performSearch(batchName);
+					        validateSearchResults(batchName);
+					    } }
+					   
+					    private void performSearch(String searchQuery) {
+						    searchTextBox.sendKeys(searchQuery);
+						    searchTextBox.sendKeys(Keys.ENTER);
+						    util.waitForElement(firstrowNameField);
+						}
+						private void validateSearchResults(String expectedName) {
+						    Assert.assertTrue(expectedName.equalsIgnoreCase(firstrowNameField.getText().trim()));
+						}
 		       
 }
 
