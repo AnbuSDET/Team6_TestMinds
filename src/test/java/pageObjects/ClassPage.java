@@ -45,7 +45,7 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//span[contains(text(),'Showing')]")
 	WebElement pageFooter;
-	
+
 	@FindBy(xpath = "//div[contains(@class,'p-datatable-footer')]")
 	WebElement footerText;
 
@@ -111,7 +111,7 @@ public class ClassPage extends Constants {
 
 	@FindBy(xpath = "//label[@for='classNo']")
 	WebElement classNumLabel;
-		
+
 	@FindBy(id = "classNo")
 	WebElement classNumInputBox;
 
@@ -267,9 +267,9 @@ public class ClassPage extends Constants {
 		}
 		return false;
 	}
-	
+
 	public void getFooterText(String footText) {
-		Assert.assertTrue(footerText.getText().contains(footText));	 
+		Assert.assertTrue(footerText.getText().contains(footText));
 
 	}
 
@@ -347,7 +347,7 @@ public class ClassPage extends Constants {
 	}
 
 	public void verifyNoOfClasses(String noOfClasses) {
-		Assert.assertEquals(noOfClasses, classNumInputBox.getAttribute("ng-reflect-model"));		
+		Assert.assertEquals(noOfClasses, classNumInputBox.getAttribute("ng-reflect-model"));
 
 	}
 

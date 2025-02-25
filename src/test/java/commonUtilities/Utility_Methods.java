@@ -201,15 +201,7 @@ public class Utility_Methods extends Constants{
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 	}
 
-	public WebElement waitUntilClickable(WebElement element, int timeoutInSeconds) {
-		return new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
-				.until(ExpectedConditions.elementToBeClickable(element));
-	}
-
-    
-	public void clickUsingJS(WebElement element) {
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-	}
+  
  
 
 	public WebElement waitUntilClickable(WebElement element, int timeoutInSeconds) {
@@ -261,11 +253,5 @@ public class Utility_Methods extends Constants{
 		
 	}
 	
-	public void validateAlertMessage(WebElement element, String expectedText) {
-		waitForElement(element);
-		String actualMsg = element.getText().replaceAll("\\s+", " ").trim();
-		String expectedMsg = expectedText.replaceAll("\\s+", " ").trim();
-		Assert.assertTrue(actualMsg.contains(expectedMsg), "Expected alert message containing: " + expectedMsg);		
-	}
 
 }

@@ -39,8 +39,8 @@ Feature: Class Module
 
     Examples: 
       | sheetName | scenarioName  |
-      | Class     | validInputMandatory |
-      | Class     | validInputAll |
+      | AddClass     | validInputMandatory |
+      | AddClass     | validInputAll |
 
   @TC_Class_04
   Scenario: Class Details pop up Invalid Input verification with empty
@@ -68,5 +68,5 @@ Feature: Class Module
 
     Examples: 
       | sheetName | scenarioName  |
-      | Class     | optionalInput |
-      | Class     | InvalidInputMandatory |
+      | AddClass     | optionalInput |
+      | AddClass     | InvalidInputMandatory |
