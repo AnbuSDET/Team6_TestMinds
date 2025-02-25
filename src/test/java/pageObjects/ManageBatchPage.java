@@ -234,9 +234,11 @@ public class ManageBatchPage extends Constants {
 	}	
 			
 	public void headerBatchClick()
+
 	{       
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", batchinMenuBar);
          util.webElement_Click(batchinMenuBar);
+
 	}
 	
 	 public String BatchPageValidation() 
@@ -554,7 +556,7 @@ public void addBatchValidDetails(String Scenario) throws IOException
 				        	SuccessMesg= batchcreation_SucessMesg.getText();				        	
 			        	if(batchcreation_SucessMesg.isDisplayed()) {   
 			        	      if (SuccessMesg.contains(data.get(4)))
-			        	    	  lms.setBatchName1(lms.getProgramName()+data.get(3));
+			        	    	  lms.setBatchName1(Lms_Pojo.getProgramName()+data.get(3));
 			        	       System.out.println("Batch Name:"+lms.getBatchName1());			        	      
 			        	       returnValue = true;	
 			        	}
@@ -581,8 +583,8 @@ public void addBatchValidDetails(String Scenario) throws IOException
 						  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", batchcreation_SucessMesg);
 				        	SuccessMesg= batchcreation_SucessMesg.getText();				        	
 			        	      if (SuccessMesg.contains(data.get(4))){
-			        	    	  lms.setBatchName2(lms.getProgramName()+data.get(3));			        	    	  
-			        	       System.out.println("Batch Name:"+lms.getBatchName2());							  
+			        	    	  lms.setBatchName2(Lms_Pojo.getProgramName()+data.get(3));			        	    	  
+			        	       System.out.println("Batch Name:"+Lms_Pojo.getBatchName2());							  
 			        	       returnValue = true; 
 			        	      }
 			        	      break;
@@ -599,7 +601,7 @@ public void addBatchValidDetails(String Scenario) throws IOException
 				  lms.setBatchName2("BlogathonTesting78");
 				  Actions actions = new Actions(driver);
 				  actions.doubleClick(batchSearchBtn).perform();
-				  util.webSendKeys(batchSearchBtn,lms.getBatchName2());
+				  util.webSendKeys(batchSearchBtn,Lms_Pojo.getBatchName2());
 				  util.webElement_Click(batchEditIcon);
 			  }
 			  
