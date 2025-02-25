@@ -46,6 +46,7 @@ public class DriverFactory extends Constants {
                 default:
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.addArguments("--disable-popup-blocking");
+                    chromeOptions.addArguments("--headless");
                     chromeOptions.addArguments("--disable-notifications");
                     chromeOptions.addArguments("--disable-extensions");
                     chromeOptions.addArguments("--blink-settings=imagesEnabled=false");
