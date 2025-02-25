@@ -21,7 +21,9 @@ public class Utility_Methods {
 	public WebDriver driver;
 	
 	public Utility_Methods(WebDriver driver) {
-		this.driver = driver;		
+		this.driver = driver;
+        this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
 	}
 	// Utility for methods	
 	
@@ -150,7 +152,22 @@ public class Utility_Methods {
 		return false;
 	}
 
+	public boolean elementVisible_allRows(List<WebElement> elementsList )
+	{				
+		for (WebElement element : elementsList) {
+	        webDriverWait.until(ExpectedConditions.visibilityOf(element));
+	    }
+        for (WebElement editIcon : elementsList) {        	
+        	
+            if (!editIcon.isEnabled()) {
+                System.out.println("Icons are enabled: " + editIcon.getText());
+                return false;
+            }
+        }
+        return true;		
+	}
 	
+
 
 	public static String random5LetterWord(){
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -167,7 +184,16 @@ public class Utility_Methods {
 		String title = driver.getTitle();
 		return title;
 	}
-   
+    
+    public  String getPageCurrrentURL() {
+		String CurrentURL = driver.getCurrentUrl();
+		return CurrentURL;
+	}
+    // Helper method to get the text of a WebElement with a wait
+    public String getElementext(WebElement element) {
+        webDriverWait.until(ExpectedConditions.visibilityOf(element));
+        return element.getText();
+    }
     
     public String getElementAttribute(WebElement element,String attribute) {
 		WebElement textElement = new WebDriverWait(driver, Duration.ofSeconds(20))
