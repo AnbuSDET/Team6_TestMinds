@@ -216,12 +216,7 @@ public class ManageBatchPage extends Constants {
 	 
 	 @FindBy(xpath = "//div[text()='batch Deleted']")
 	 public  WebElement Successmessage2;
-	 
-		@FindBy(id = "filterGlobal")
-		private WebElement searchTextBox;
-		
-		@FindBy(xpath = "//tr[1]/td[2]")
-		private WebElement firstrowNameField;
+
 	 
     List<String> batchNameBeforeClick;
     List<String> batchNameAfterClick1;
@@ -866,23 +861,6 @@ public void addBatchValidDetails(String Scenario) throws IOException
 
 						}
 		       
-				  public void searchBatch(String sheetName, String scenarioName) throws IOException, InterruptedException {
-					    List<String> rowData = xlutils.getRowData(sheetName, 0, scenarioName);
-					    String batchName = rowData.get(5);
-	
-					    if (scenarioName.equalsIgnoreCase("Search with valid batch name")) {
-					        performSearch(batchName);
-					        validateSearchResults(batchName);
-					    } }
-					   
-					    private void performSearch(String searchQuery) {
-						    searchTextBox.sendKeys(searchQuery);
-						    searchTextBox.sendKeys(Keys.ENTER);
-						    util.waitForElement(firstrowNameField);
-						}
-						private void validateSearchResults(String expectedName) {
-						    Assert.assertTrue(expectedName.equalsIgnoreCase(firstrowNameField.getText().trim()));
-						}
 		       
 }
 

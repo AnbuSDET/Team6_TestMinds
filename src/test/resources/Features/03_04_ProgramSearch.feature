@@ -15,7 +15,7 @@ Examples:
  |sheetName|scenarioName|
  |Program|Searching the added program using program name|
  |Program|Searching the added program using program description|
- #|Program|Searching the added program using invalid program name|
- #|Program|Searching the added program using partial program name|
+ |Program|Searching the added program using invalid program name|
+ |Program|Searching the added program using partial program name|
  
     
