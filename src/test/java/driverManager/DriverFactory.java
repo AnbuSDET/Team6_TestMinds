@@ -25,12 +25,14 @@ public class DriverFactory extends Constants {
     }
     
     public void quitDriver() {
+    	System.out.println("quitting the driver");
     	 driver.get().quit();
     	 driver.remove();
     }
 
 	public WebDriver setupDriver() {
         if (driver.get() == null) {
+        	System.out.println("setting the driver");
             String browser = configProp.getString("browser");
             System.out.println("browser value is:" + browser);
             switch (browser) {
@@ -47,6 +49,7 @@ public class DriverFactory extends Constants {
                     chromeOptions.addArguments("--disable-notifications");
                     chromeOptions.addArguments("--disable-extensions");
                     chromeOptions.addArguments("--blink-settings=imagesEnabled=false");
+                 //   chromeOptions.addArguments("--auto-open-devtools-for-tabs");
                     driver.set(new ChromeDriver(chromeOptions));
                     break;
             }
