@@ -266,6 +266,7 @@ public class ManageBatchsteps {
        assertFalse("Double arrow left button should be disabled", results[0]);
 	     assertFalse("back button should be disabled", results[1]);
    }
+
    @Then("Admin searches by valid batch name with {string} and {string} in the batch module")
    public void admin_searches_by_valid_batch_name_with_and_in_the_batch_module(String sheetName, String scenarioName) throws IOException, InterruptedException {
        // Write code here that turns the phrase above into concrete actions
