@@ -3,6 +3,7 @@ package commonUtilities;
 import driverManager.DriverFactory;
 import pageObjects.ClassPage;
 import pageObjects.ClassPage_Part2;
+import pageObjects.DashboardPage;
 import pageObjects.LoginPage;
 
 import pageObjects.ManageBatchPage;
@@ -24,6 +25,7 @@ public class Context {
 
 	private ClassPage_Part2 classpage2;
 	private ProgramPage_Part2 programpage2;
+	private DashboardPage dashboardpage;
 
 
 	public Context() {
@@ -37,6 +39,7 @@ public class Context {
 
 		classpage2 = new ClassPage_Part2(driverFactory.setupDriver());
 		programpage2=new ProgramPage_Part2(driverFactory.setupDriver());
+		dashboardpage=new DashboardPage(driverFactory.setupDriver());
 
 
 	}
@@ -76,6 +79,8 @@ public class Context {
 	public ProgramPage_Part2 getProgramPage2() {
 		return programpage2;
 	}
-
+	public DashboardPage getDashboardPage() {
+		return dashboardpage;
+	}
 
 }

@@ -3,11 +3,11 @@ package pojo;
 public class Lms_Pojo {
 
 	
-	private String programName;
-	private String batchName1;
-	private String batchName2;;
+	private static String programName;
+	private static String batchName1;
+	private static String batchName2;;
 	
-	public String getProgramName() {
+	public static String getProgramName() {
 		return programName;
 	}
 	
@@ -19,7 +19,7 @@ public class Lms_Pojo {
 		return batchName1;
 	}
 
-	public String getBatchName2() {
+	public static String getBatchName2() {
 		return batchName2;
 	}
 
