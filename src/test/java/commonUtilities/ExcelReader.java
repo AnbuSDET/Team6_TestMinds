@@ -258,43 +258,52 @@ public class ExcelReader {
 	}
 	
 	
-public static Map<String, List<Map<String, String>>> loadExcelData() {
-		
-		Workbook wb = null;
-		Map<String, List<Map<String, String>>> sheetNameRowsMap = new HashMap<>();
-		
-		try {
-			
-			wb = WorkbookFactory.create(ExcelReader.class.getResourceAsStream("/testData/LMSData.xlsx"));
-			
-			for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-				Sheet sheet = wb.getSheetAt(i);
-				List<Map<String, String>> recordList = new ArrayList<>();
-				Row headerRow = sheet.getRow(0);
-				for (int j = 1; j <= sheet.getLastRowNum(); j++) {
-					Row row = sheet.getRow(j);
-				int colCount = headerRow.getPhysicalNumberOfCells();
-					Map<String, String> record = new HashMap<>();
-					for (int k = 0; k < colCount; k++) {
-				//	for (int k = 0; k < row.getLastCellNum(); k++) {
-						Cell cell = row.getCell(k);
-						String cellValue = cell!= null ? cell.getCellType()==CellType.NUMERIC ? ((long)cell.getNumericCellValue() + "") : cell.getStringCellValue():null;
-						String key = headerRow.getCell(k)!=null? headerRow.getCell(k).getStringCellValue():"";
-						record.put(key, cellValue);
-					}
-					recordList.add(record);
-				}
-				sheetNameRowsMap.put(sheet.getSheetName(), recordList);
-			}
-		} catch (EncryptedDocumentException | IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				wb.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return sheetNameRowsMap;
-	}
+	@SuppressWarnings("resource")
+	public String getTestData(String sheetName, String testCase,String Entry) throws IOException {
+        XSSFWorkbook wb;
+        String cellValue = "";
+        File file = new File("src/test/resources/TestData/DataLMS.xlsx");  
+       
+        FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
+        wb = new XSSFWorkbook(fis); // creating Workbook instance that refers to .xlsx file
+        XSSFSheet sheet = wb.getSheet(sheetName);
+
+        for (Row row : sheet) {
+            Cell firstCell = row.getCell(0);      
+           
+            if(firstCell.getStringCellValue().equalsIgnoreCase("scenarioName"))
+            	continue;                
+            
+            if (null!= firstCell && firstCell.getStringCellValue().equalsIgnoreCase(testCase)) {
+            
+            	if(Entry== "username")
+            	{
+            		if(null !=row.getCell(1))
+            			cellValue= row.getCell(1).getStringCellValue();
+            		else
+            			cellValue = "";
+            				
+            	}
+            	   
+            	else if(Entry== "password")
+            	{
+            		if(null !=row.getCell(2))
+            			cellValue= row.getCell(2).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	else if(Entry== "ErrorMessage")
+            	{
+            		if(null !=row.getCell(3))
+            			cellValue= row.getCell(3).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	
+        }
+
+        wb.close(); 
+    }
+		return cellValue;}
+
 }
