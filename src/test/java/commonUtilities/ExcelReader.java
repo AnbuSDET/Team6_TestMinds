@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -23,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+
 public class ExcelReader {
 	public String path;
 	public FileInputStream fis = null;
@@ -32,39 +35,41 @@ public class ExcelReader {
 	private XSSFRow row = null;
 	private XSSFCell cell = null;
 
-
-
-
-	public ExcelReader(String path)
-	{
-		this.path=path;
+	public ExcelReader(String path) {
+		this.path = path;
 	}
-	public List<Map<String, String>> getData(String excelFilePath, String sheetName){
+
+	public List<Map<String, String>> getData(String excelFilePath, String sheetName) {
 		Sheet sheet = getSheetByName(excelFilePath, sheetName);
 		return readSheet(sheet);
 	}
+
 	public List<Map<String, String>> getData(String excelFilePath, int sheetNumber)
 			throws InvalidFormatException, IOException {
 		Sheet sheet = getSheetByIndex(excelFilePath, sheetNumber);
 		return readSheet(sheet);
 	}
-	private Sheet getSheetByName(String excelFilePath, String sheetName)  {
+
+	private Sheet getSheetByName(String excelFilePath, String sheetName) {
 		Sheet sheet = getWorkBook(excelFilePath).getSheet(sheetName);
 		return sheet;
 	}
-	private Sheet getSheetByIndex(String excelFilePath, int sheetNumber)  {
+
+	private Sheet getSheetByIndex(String excelFilePath, int sheetNumber) {
 		Sheet sheet = getWorkBook(excelFilePath).getSheetAt(sheetNumber);
 		return sheet;
 	}
-	private Workbook getWorkBook(String excelFilePath)  {
+
+	private Workbook getWorkBook(String excelFilePath) {
 		Workbook workbook = null;
 		try {
 			workbook = WorkbookFactory.create(new File(excelFilePath));
-		} catch(Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		return workbook;
 	}
+
 	private List<Map<String, String>> readSheet(Sheet sheet) {
 		Row row;
 		int totalRow = sheet.getPhysicalNumberOfRows();
@@ -84,6 +89,7 @@ public class ExcelReader {
 		}
 		return excelRows;
 	}
+
 	private int getHeaderRowNumber(Sheet sheet) {
 		Row row;
 		int totalRow = sheet.getLastRowNum();
@@ -108,10 +114,10 @@ public class ExcelReader {
 		}
 		return (-1);
 	}
+
 	private Row getRow(Sheet sheet, int rowNumber) {
 		return sheet.getRow(rowNumber);
 	}
-	
 
 	private LinkedHashMap<String, String> getCellValue(Sheet sheet, Row row, int currentColumn) {
 		LinkedHashMap<String, String> columnMapdata = new LinkedHashMap<String, String>();
@@ -169,93 +175,135 @@ public class ExcelReader {
 		}
 		return columnMapdata;
 	}
-	
-	public String getCellData(String sheetName,int rownum,int colnum) throws IOException
-	{
-		fis=new FileInputStream(path);
-		workbook=new XSSFWorkbook(fis);
-		sheet=workbook.getSheet(sheetName);
-		row=sheet.getRow(rownum);
-		cell=row.getCell(colnum);
+
+	public String getCellData(String sheetName, int rownum, int colnum) throws IOException {
+		fis = new FileInputStream(path);
+		workbook = new XSSFWorkbook(fis);
+		sheet = workbook.getSheet(sheetName);
+		row = sheet.getRow(rownum);
+		cell = row.getCell(colnum);
 
 		DataFormatter formatter = new DataFormatter();
 		String data;
-		try{
-			data = formatter.formatCellValue(cell); //Returns the formatted value of a cell as a String regardless of the cell type.
-		}
-		catch(Exception e)
-		{
-			data="";
+		try {
+			data = formatter.formatCellValue(cell); // Returns the formatted value of a cell as a String regardless of
+													// the cell type.
+		} catch (Exception e) {
+			data = "";
 		}
 		workbook.close();
 		fis.close();
 		return data;
 	}
-	
-	public List<String> getRowData(String sheetName,int filterColumnIndex,String filterValue) throws IOException
-	{
 
-		System.out.println("-----------path=-------------"+path);
-		fis=new FileInputStream(path);
-		workbook=new XSSFWorkbook(fis);
-		sheet=workbook.getSheet(sheetName);
+	public List<String> getRowData(String sheetName, int filterColumnIndex, String filterValue) throws IOException {
 
-		
+		System.out.println("-----------path=-------------" + path);
+		fis = new FileInputStream(path);
+		workbook = new XSSFWorkbook(fis);
+		// sheet = workbook.getSheet(sheetName);
+
 		// Get sheet with sheet name
-        sheet=workbook.getSheet(sheetName);
-        
-        List<String> rowData = new ArrayList<>();
+		sheet = workbook.getSheet(sheetName);
 
-        
+		List<String> rowData = new ArrayList<>();
+
 		DataFormatter formatter = new DataFormatter();
 		String data;
 		int i = 0;
-		
-		
-        // Iterate over the rows
-			
+
+		// Iterate over the rows
 
 		for (Row row : sheet) {
 
-	    	// Get the cell in the column you want to filter by
-	        Cell filterCell = row.getCell(filterColumnIndex);
+			// Get the cell in the column you want to filter by
+			Cell filterCell = row.getCell(filterColumnIndex);
 
-	        // Check if the cell contains the filter value
-            if (filterCell != null && filterCell.getCellType() == CellType.STRING && filterCell.getStringCellValue().equals(filterValue)) {
-            	System.out.println("Checking row value: " + filterCell.getStringCellValue());
-       		 short minColIx = row.getFirstCellNum();
-       		 short maxColIx = row.getLastCellNum();
-       		 
-       	// Get the whole row or perform actions with the matching row  
-       		 
-       		 for(short colIx=minColIx; colIx<maxColIx; colIx++) {
-       		   Cell cell = row.getCell(colIx);
-      			i++;
-       		   if(cell == null) {
-	       		     data = "";
-	       		  System.out.print(data + "\t");
-	       		  }
-       		   else {
-	           		try{
-	       			data = formatter.formatCellValue(cell); //Returns the formatted value of a cell as a String regardless of the cell type.
-	            	System.out.print(data + "\t");
-	                   
-	       		}
-	       		catch(Exception e)
-	       		{
-	       			data="";
-	       		}
-	       	}
-      			rowData.add(data);
-       	}    	
-            	
-                System.out.println();
-                System.out.println("no of columns="+i);
-                System.out.println("row.getLastCellNum()="+row.getLastCellNum());
-            }
-        }
+			// Check if the cell contains the filter value
+			if (filterCell != null && filterCell.getCellType() == CellType.STRING
+					&& filterCell.getStringCellValue().equals(filterValue)) {
+				System.out.println("Checking row value: " + filterCell.getStringCellValue());
+				short minColIx = row.getFirstCellNum();
+				short maxColIx = row.getLastCellNum();
+
+				// Get the whole row or perform actions with the matching row
+
+				for (short colIx = minColIx; colIx < maxColIx; colIx++) {
+					Cell cell = row.getCell(colIx);
+					i++;
+					if (cell == null) {
+						data = "";
+						System.out.print(data + "\t");
+					} else {
+						try {
+							data = formatter.formatCellValue(cell); // Returns the formatted value of a cell as a String
+																	// regardless of the cell type.
+							System.out.print(data + "\t");
+
+						} catch (Exception e) {
+							data = "";
+						}
+					}
+					rowData.add(data);
+				}
+
+				System.out.println();
+				System.out.println("no of columns=" + i);
+				System.out.println("row.getLastCellNum()=" + row.getLastCellNum());
+			}
+		}
 		workbook.close();
 		fis.close();
 		return rowData;
 	}
+	
+	
+	@SuppressWarnings("resource")
+	public String getTestData(String sheetName, String testCase,String Entry) throws IOException {
+        XSSFWorkbook wb;
+        String cellValue = "";
+        File file = new File("src/test/resources/TestData/DataLMS.xlsx");  
+       
+        FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
+        wb = new XSSFWorkbook(fis); // creating Workbook instance that refers to .xlsx file
+        XSSFSheet sheet = wb.getSheet(sheetName);
+
+        for (Row row : sheet) {
+            Cell firstCell = row.getCell(0);      
+           
+            if(firstCell.getStringCellValue().equalsIgnoreCase("scenarioName"))
+            	continue;                
+            
+            if (null!= firstCell && firstCell.getStringCellValue().equalsIgnoreCase(testCase)) {
+            
+            	if(Entry== "username")
+            	{
+            		if(null !=row.getCell(1))
+            			cellValue= row.getCell(1).getStringCellValue();
+            		else
+            			cellValue = "";
+            				
+            	}
+            	   
+            	else if(Entry== "password")
+            	{
+            		if(null !=row.getCell(2))
+            			cellValue= row.getCell(2).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	else if(Entry== "ErrorMessage")
+            	{
+            		if(null !=row.getCell(3))
+            			cellValue= row.getCell(3).getStringCellValue();
+            		else
+            			cellValue = "";
+            	}
+            	
+        }
+
+        wb.close(); 
+    }
+		return cellValue;}
+
 }

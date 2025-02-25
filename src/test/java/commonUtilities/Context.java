@@ -32,6 +32,7 @@ public class Context {
 		driverFactory = DriverFactory.getInstance();
 		loginPage = new LoginPage(driverFactory.setupDriver());
 		classPage = new ClassPage(driverFactory.setupDriver());
+		System.out.println("setting up driver in context");
 
 	   managebatchpage = new ManageBatchPage(driverFactory.setupDriver());
 	   pagination= new Pagination(driverFactory.setupDriver());

@@ -10,7 +10,6 @@ When Admin clicks the batch menu from the header
 Then Admin should land on the Batch page
 
 
-
 Scenario: validate delete Icon on any row
 
 When Admin clicks the delete Icon on any row

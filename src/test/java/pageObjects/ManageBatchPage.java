@@ -201,7 +201,7 @@ public class ManageBatchPage extends Constants {
 	 @FindBy(xpath = "//tbody/tr/td[2]")
 	 public List<WebElement> batchnamelist;	 
      
-	 //@FindBy(xpath="//tr[1]/td[1]")
+	 
 	 @FindBy(xpath="//div[@role='checkbox']")
 	 public  WebElement singlecheckbox;
 	 
@@ -234,9 +234,11 @@ public class ManageBatchPage extends Constants {
 	}	
 			
 	public void headerBatchClick()
-	{  
-		driver.navigate().refresh();
-		util.clickUsingJS(util.waitUntilClickable(batchinMenuBar, 50));
+
+	{       
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", batchinMenuBar);
+         util.webElement_Click(batchinMenuBar);
+
 	}
 	
 	 public String BatchPageValidation() 
@@ -375,6 +377,7 @@ public class ManageBatchPage extends Constants {
 		
 		public void clickAddnewbatch()
 		{
+			
 			util.webElement_Click(AddNewBatchBtn);
 		}
 		
@@ -424,8 +427,7 @@ public class ManageBatchPage extends Constants {
 			    	   
 			    
 			    public void popUp_ProgramName_Select()
-			    {	  
-			    	
+			    {	  			    	
 			    	//String optionValue="testingtesting";		
 			    	//lms.setProgramName(optionValue);
 			    			    	
